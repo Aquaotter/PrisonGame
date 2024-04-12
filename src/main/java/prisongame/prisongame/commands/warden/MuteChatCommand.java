@@ -13,11 +13,13 @@ import prisongame.prisongame.PrisonGame;
 public class MuteChatCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        PrisonGame.chatmuted = !PrisonGame.chatmuted;
+        /*PrisonGame.chatmuted = !PrisonGame.chatmuted;
         if (PrisonGame.chatmuted)
             Bukkit.broadcastMessage(ChatColor.RED + "Warden has muted the chat!");
         if (!PrisonGame.chatmuted)
             Bukkit.broadcastMessage(ChatColor.RED + "Warden has unmuted the chat!");
+         */
+        sender.sendMessage(ChatColor.RED + "Sorry, This Action is now Removed Contact 4950 or _Aquaotter_ is this is a issue!");
         return true;
     }
 }

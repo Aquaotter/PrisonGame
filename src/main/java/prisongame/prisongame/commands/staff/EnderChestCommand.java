@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_20_R1.inventory.CraftInventory;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.OfflineEnderChest;
@@ -21,40 +20,36 @@ public class EnderChestCommand implements CommandExecutor {
         var subcommand = args[0];
         var target = Bukkit.getOfflinePlayer(args[1]);
 
-        return switch (subcommand) {
-            case "inspect" -> inspect(sender, target);
-            case "clear" -> clear(sender, target);
-            default -> false;
-        };
+        if(subcommand.equals("inspect")){inspect(sender, target); return true;}
+        if(subcommand.equals("clear")){clear(sender, target); return true;}
+        return false;
     }
 
-    private boolean inspect(CommandSender sender, OfflinePlayer offlineTarget) {
+    private void inspect(CommandSender sender, OfflinePlayer offlineTarget) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage(PrisonGame.mm.deserialize("<red>Only players can inspect ender chests."));
-            return true;
+            return;
         }
 
         var target = offlineTarget.getPlayer();
 
         if (target == null) {
             player.openInventory(new CraftInventory(new OfflineEnderChest(offlineTarget)));
-            return true;
+            return;
         }
 
         player.openInventory(target.getEnderChest());
-        return true;
     }
 
-    private boolean clear(CommandSender sender, OfflinePlayer offlineTarget) {
+    private void clear(CommandSender sender, OfflinePlayer offlineTarget) {
         var target = offlineTarget.getPlayer();
 
         if (target == null) {
             sender.sendMessage(PrisonGame.mm.deserialize("<red>The target isn't online."));
-            return true;
+            return;
         }
 
         target.getEnderChest().clear();
         sender.sendMessage(PrisonGame.mm.deserialize("\n<gray>Cleared ender chest of <white>" + target.getName() + "</white>.\n"));
-        return true;
     }
 }

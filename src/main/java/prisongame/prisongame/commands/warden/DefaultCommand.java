@@ -71,7 +71,7 @@ public class DefaultCommand implements CommandExecutor {
         nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
         nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
 
-        nw.setNoDamageTicks(20 * 45);
+        nw.setNoDamageTicks(20 * 15);
         ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
         ItemMeta cardm2 = card2.getItemMeta();
         cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");

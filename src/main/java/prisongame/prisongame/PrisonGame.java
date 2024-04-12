@@ -262,7 +262,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
         this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
         this.getCommand("rstmoney").setExecutor(new ResetMoneyCommand());
-        this.getCommand("enderchest").setExecutor(new EnderChestCommand());
+        //this.getCommand("enderchest").setExecutor(new EnderChestCommand());
         this.getCommand("pbsettings").setExecutor(new PBSettingsCommand());
         this.getCommand("rstascen").setExecutor(new ResetAscensionCommand());
         this.getCommand("nerdcheatcommand").setExecutor(new NerdCheatCommand());

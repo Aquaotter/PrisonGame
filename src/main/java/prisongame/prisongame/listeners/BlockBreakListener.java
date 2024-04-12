@@ -52,7 +52,11 @@ public class BlockBreakListener implements Listener {
                 event.setCancelled(false);
                 event.getBlock().setType(Material.DEEPSLATE);
                 event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
+                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 37.5 * MyTask.jobm);
+                }else{
                 Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 30.0 * MyTask.jobm);
+                }
                 event.getPlayer().setCooldown(Material.IRON_PICKAXE, 5);
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                     event.getBlock().setType(PrisonGame.oretypes[new Random().nextInt(0, PrisonGame.oretypes.length - 1)]);

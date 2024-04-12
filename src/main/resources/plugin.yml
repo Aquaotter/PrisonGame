@@ -41,8 +41,8 @@ commands:
     permission: pbb.vanish
     aliases: /v
   enderchest:
-    description: Inspect/veiw ender chest of provided player.
-    usage: /enderchest <inspect/view> (player)
+    description: Inspect/Clear ender chest of provided player.
+    usage: /enderchest <inspect/clear> (player)
     permission: pbb.enderchest
     aliases: /ec
   pbbreload:

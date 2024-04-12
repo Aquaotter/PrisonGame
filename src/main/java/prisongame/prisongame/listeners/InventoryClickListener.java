@@ -202,11 +202,8 @@ public class InventoryClickListener implements Listener {
                             event.setCancelled(true);
                             player.damage(999999);
                             Bukkit.broadcastMessage(player.getName() + " was robbed by bertrude (L)");
-                        } else {
-                            player.sendMessage("Bertrude was nice today and decided not to rob you :D");
                         }
                     }
-
                     if (name.equals(ChatColor.LIGHT_PURPLE + "no warden spaces")) {
                         event.setCancelled(true);
                         if (!Keys.NO_WARDEN_SPACES.has(player)) {
