@@ -37,9 +37,9 @@ repositories {
 }
 
 dependencies {
+    // Your existing dependencies
     paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
     implementation "cc.ekblad:4koma:1.2.0"
-
     compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.20"
     compileOnly("LibsDisguises:LibsDisguises:10.0.31") {
         exclude group: "org.spigotmc"

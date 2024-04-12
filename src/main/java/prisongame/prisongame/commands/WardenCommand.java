@@ -18,7 +18,11 @@ public class WardenCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
 
-        if (!PrisonGame.wardenenabled || PrisonGame.hardmode.get(sender)) {
+        if(PrisonGame.hardmode.get(sender)){
+            player.sendMessage(ChatColor.RED + "Do not use /warden in hard mode!");
+            return true;
+        }
+        if (!PrisonGame.wardenenabled) {
             player.kickPlayer(ChatColor.RED + "Do not /warden during a reload.");
             player.sendMessage(ChatColor.RED + sender.getName() + " was kicked for doing /warden during a reload");
             return true;
@@ -37,7 +41,7 @@ public class WardenCommand implements CommandExecutor {
             case "grammar" -> new GrammarCommand();
             case "guard" -> new GuardCommand();
             case "intercom" -> new IntercomCommand();
-            case "mutechat" -> new MuteChatCommand();
+            //case "mutechat" -> new MuteChatCommand();
             case "nurse" -> new NurseCommand();
             case "pass" -> new PassCommand();
             case "prefix" -> new PrefixCommand();

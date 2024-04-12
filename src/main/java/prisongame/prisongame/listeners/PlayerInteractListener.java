@@ -2,6 +2,8 @@ package prisongame.prisongame.listeners;
 
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.enchantments.Enchantment;
@@ -10,11 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
@@ -22,9 +26,7 @@ import prisongame.prisongame.config.Prison;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Random;
+import java.util.*;
 
 import static prisongame.prisongame.MyListener.playerJoinignoreAsc;
 import static prisongame.prisongame.config.ConfigKt.getConfig;
@@ -69,6 +71,7 @@ public class PlayerInteractListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract2(PlayerInteractEvent event) {
+        if(event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)) return;
         if (event.getPlayer().getActivePotionEffects().contains(PotionEffectType.CONFUSION)) {
             event.setCancelled(true);
             return;
@@ -152,7 +155,11 @@ public class PlayerInteractListener implements Listener {
                 if (event.getItem() != null) {
                     if (event.getItem().getType().equals(Material.WOODEN_SHOVEL)) {
                         if (!event.getPlayer().hasCooldown(Material.WOODEN_SHOVEL)) {
-                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 8.0 * MyTask.jobm);
+                            if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 10.0 * MyTask.jobm);
+                            }else {
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 8.0 * MyTask.jobm);
+                            }
                             event.getClickedBlock().setType(Material.BEDROCK);
                             event.getPlayer().setCooldown(Material.WOODEN_SHOVEL, 10);
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
@@ -184,7 +191,11 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().setCooldown(Material.COD, 2);
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                                 event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
-                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
+                                if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
+                                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.5 * MyTask.jobm);
+                                }else {
+                                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
+                                }
                             }, 20 * 4);
                         }
                     }
@@ -204,8 +215,44 @@ public class PlayerInteractListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.DISPENSER)) {
                 event.setCancelled(true);
             }
+            if(event.getClickedBlock().getType().equals(Material.WARPED_HANGING_SIGN)){
+                org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if(sign.getLine(1).equals("Zulfiqar")){
+                    if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 450000.0) {
+                        Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 450000);
+                        ItemStack trident = new ItemStack(Material.TRIDENT);
+                        ItemMeta itemMeta = trident.getItemMeta();
+                        itemMeta.setDisplayName(ChatColor.BLUE + "Zulfiqar");
+                        List<String> lore = new ArrayList<String>();
+                        lore.add(ChatColor.DARK_PURPLE + "backrooms?");
+                        lore.add("");
+                        itemMeta.setLore(lore);
+                        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), "generic.armor", 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                        itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR, modifier);
+                        AttributeModifier modifier1 = new AttributeModifier(UUID.randomUUID(), "generic.attackDamage", 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, modifier1);
+                        AttributeModifier modifier2 = new AttributeModifier(UUID.randomUUID(), "generic.attackSpeed", 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                        itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, modifier2);
+                        AttributeModifier modifier3 = new AttributeModifier(UUID.randomUUID(), "generic.movementSpeed", 0.02, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+                        itemMeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, modifier3);
+                        itemMeta.setUnbreakable(true);
+                        trident.setItemMeta(itemMeta);
+                        trident.addUnsafeEnchantment(Enchantment.CHANNELING, 1);
+                        trident.addUnsafeEnchantment(Enchantment.LOYALTY, 2);
+                        trident.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 5);
+                        trident.addUnsafeEnchantment(Enchantment.VANISHING_CURSE, 1);
+                        event.getPlayer().getInventory().addItem(trident);
+                    }
+                }
+            }
             if (event.getClickedBlock().getType().equals(Material.OAK_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if(sign.getLine(1).equalsIgnoreCase("not meth")){
+                    if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 2500.0) {
+                        Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 2500);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+ event.getPlayer().getName()+" potion{custom_potion_effects:[{id:strength,duration:400,amplifier:0},{id:speed,duration:200,amplifier:2},{id:nausea,duration:140,amplifier:1},{id:poison,duration:100,amplifier:3}],display:{Name:'[\"\",{\"text\":\"Not Meth\",\"italic\":false,\"color\":\"yellow\"}]'}}");
+                    }
+                }
                 if (MyTask.bossbar.getTitle().equals("Breakfast") || MyTask.bossbar.getTitle().equals("Lunch")) {
                     if (sign.getLine(1).equals("Get Cafe")) {
                         if (PrisonGame.gotcafefood.getOrDefault(event.getPlayer(), false)) {
@@ -286,7 +333,7 @@ public class PlayerInteractListener implements Listener {
                     if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
                         if (event.getPlayer() == PrisonGame.warden && event.getPlayer().getPassengers().size() == 0) {
                             if (PrisonGame.swapcool <= 0) {
-                                Inventory inv = Bukkit.createInventory(null, 9 * 2, "Map Switch");
+                                Inventory inv = Bukkit.createInventory(null, 9 * 3, "Map Switch");
 
                                 for (Prison prison : getConfig().getPrisons().values().stream().sorted(Comparator.comparingInt((p) -> p.getPriority())).toList()) {
                                     if (!prison.getShowInSelector())
@@ -886,7 +933,11 @@ public class PlayerInteractListener implements Listener {
                 if (event.getItem() != null && event.getItem().getType().equals(Material.CARROT_ON_A_STICK)) {
                     if (!event.getPlayer().hasCooldown(Material.CARROT_ON_A_STICK)) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.75f, 1.75f);
-                        Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.5 * MyTask.jobm);
+                        if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
+                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.625 * MyTask.jobm);
+                        }else {
+                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.5 * MyTask.jobm);
+                        }
                         event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, 5);
                     }
                 }
@@ -897,7 +948,11 @@ public class PlayerInteractListener implements Listener {
                         if (!event.getPlayer().hasCooldown(Material.WOODEN_AXE)) {
                             event.getPlayer().setCooldown(Material.WOODEN_AXE, 10);
                             event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_WOOD_BREAK, 1, 1);
-                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
+                            if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.5 * MyTask.jobm);
+                            }else {
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
+                            }
                         }
                     }
                 }

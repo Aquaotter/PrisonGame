@@ -27,7 +27,7 @@ public class UwUtils {
                 .replaceAll(":<", "(︶︹︶)")
                 .replaceAll(":3", "(・3・)")
                 .replaceAll(":D", "(ﾉ◕ヮ◕)ﾉ*:・ﾟ✧")
-                .replaceAll("\\._\\.", "(っ´ω`c)")
+                .replaceAll("\\._\\.", "(why can't i type this)")
                 .replaceAll("fuck", "fwick")
                 .replaceAll("shit", "*poops*")
                 .replaceAll("wtf", "whawt the fwick")

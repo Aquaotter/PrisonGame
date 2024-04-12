@@ -15,7 +15,6 @@ public record Key<Z>(String name, NamespacedKey key, KeyType<Z> type) {
 
         if (value == null)
             return defaultValue;
-
         return value;
     }
 

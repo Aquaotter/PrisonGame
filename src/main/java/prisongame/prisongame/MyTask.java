@@ -320,10 +320,10 @@ public class MyTask extends BukkitRunnable {
             timer1 = 2000;
             timer2 = 4000;
             bossbar.setTitle("Breakfast");
-            for (Player p : Bukkit.getOnlinePlayers()) {
+            /*for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!PrisonGame.hardmode.get(p) && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER)
                     p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
-            }
+            }*/
         }
         if (Bukkit.getWorld("world").getTime() > 4000 && Bukkit.getWorld("world").getTime() < 7000) {
             timer1 = 4000;
@@ -342,10 +342,10 @@ public class MyTask extends BukkitRunnable {
             timer2 = 13000;
             bossbar.setTitle("Lunch");
             jobm = 1;
-            for (Player p : Bukkit.getOnlinePlayers()) {
+            /*for (Player p : Bukkit.getOnlinePlayers()) {
                 if (!PrisonGame.hardmode.get(p) && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER)
                     p.addPotionEffect(PotionEffectType.SATURATION.createEffect(120, 0));
-            }
+            }*/
         }
         if (Bukkit.getWorld("world").getTime() > 13000 && Bukkit.getWorld("world").getTime() < 15000) {
             hasAlerted = false;
@@ -626,7 +626,7 @@ public class MyTask extends BukkitRunnable {
                     }
                 }
                 if (PrisonGame.roles.get(p) == Role.PRISONER && !PrisonGame.escaped.get(p)) {
-                    p.addPotionEffect(PotionEffectType.SATURATION.createEffect(20, 3));
+                    //p.addPotionEffect(PotionEffectType.SATURATION.createEffect(20, 3));
                     p.getWorld().getWorldBorder().setWarningDistance(Integer.MAX_VALUE);
                     if (p.getWorld().getName().equals("endprison")) {
                         if (!new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.JIGSAW)) {
@@ -739,13 +739,18 @@ public class MyTask extends BukkitRunnable {
 
         var guardCount = 0;
         var prisonerCount = 0;
+        var playerCount = 0;
+        for(var player : Bukkit.getOnlinePlayers()){
+            if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+                playerCount++;
+            }
+        }
 
         var guards = Component.empty();
         var prisoners = Component.empty();
 
         for (var player : Bukkit.getOnlinePlayers()) {
             var role = PrisonGame.roles.get(player);
-
             switch (role) {
                 case NURSE, GUARD, SWAT -> {
                     if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
@@ -754,8 +759,8 @@ public class MyTask extends BukkitRunnable {
                                 .append(Component.space())
                                 .append(PrisonGame.getPingDisplay(player))
                                 .append(Component.newline()));
+                        guardCount++;
                     }
-                    guardCount++;
                 }
                 case PRISONER -> {
                     if (player.isDead() || player.hasPotionEffect(PotionEffectType.LUCK)) {
@@ -772,15 +777,15 @@ public class MyTask extends BukkitRunnable {
                                 .append(Component.space())
                                 .append(PrisonGame.getPingDisplay(player))
                                 .append(Component.newline()));
+                        prisonerCount++;
                     }
-                    prisonerCount++;
                 }
             }
         }
 
         var tab = PrisonGame.mm.deserialize("""
                 <gray>---
-                <yellow>PrisonButBad</yellow> - <white>made by agmass!</white>
+                <yellow>PrisonButBad</yellow> - <white>made by agmass, 4950, Goose, and _Aquaotter_!</white>
                 <green>Players: <player-count></green>
                 <red><warden></red>
                 ---
@@ -796,7 +801,7 @@ public class MyTask extends BukkitRunnable {
                 <prisoners>
                 <padding>
                 """,
-                Placeholder.component("player-count", PrisonGame.mm.deserialize("" + Bukkit.getOnlinePlayers().size())),
+                Placeholder.component("player-count", PrisonGame.mm.deserialize("" + playerCount)),
                 Placeholder.component("warden", wardenDisplay),
                 Placeholder.component("guard-count", PrisonGame.mm.deserialize("" + guardCount)),
                 Placeholder.component("guards", guards),
@@ -979,7 +984,6 @@ public class MyTask extends BukkitRunnable {
             if (p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
                 p.removePotionEffect(PotionEffectType.GLOWING);
             }
-
             if (!PrisonGame.hardmode.get(p)) {
                 if (PrisonGame.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix() != null) {
                     if (!p.getDisplayName().contains(PrisonGame.api.getPlayerAdapter(Player.class).getUser(p).getCachedData().getMetaData().getPrefix())) {
@@ -1019,7 +1023,7 @@ public class MyTask extends BukkitRunnable {
                         p.sendMessage("no illegal 4 u!");
                         p.getInventory().getItemInMainHand().removeEnchantment(Enchantment.DAMAGE_ALL);
                         p.kickPlayer("");
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + p.getName() + " 5m Abuse of Illegals [AUTO]");
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + p.getName() + " 5m Abuse of Illegals [AUTO] (Diamond Sharp Sword)");
                     }
                 }
             }

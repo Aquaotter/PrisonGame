@@ -71,8 +71,11 @@ public class PlayerJoinListener implements Listener {
                 player.sendMessage(PrisonGame.mm.deserialize("\n<red>Your money has been reset due to the start of a new season!\n"));
             }
         } catch (IOException e) {
-            player.sendMessage(PrisonGame.mm.deserialize("<red>An error occurred checking the current season. Please let Goose know on Discord. (@lilhonks)"));
+            player.sendMessage(PrisonGame.mm.deserialize("<red>An error occurred checking the current season. Please let _Aquaotter_ know on Discord. (@aquaotter)"));
             Bukkit.getConsoleSender().sendMessage(PrisonGame.mm.deserialize("<red>" + e.getMessage()));
+        }
+        if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+            event.setJoinMessage("");
         }
     }
 
@@ -90,12 +93,16 @@ public class PlayerJoinListener implements Listener {
             if (loopedContainer.has(VanishCommand.VANISHED))
                 player.hidePlayer(PrisonGame.instance, loopedPlayer);
         }
+        if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+            event.setJoinMessage("");
+        }
 
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (!getConfig().getDev())
+        if(event.getPlayer().isInvulnerable()) event.getPlayer().setInvulnerable(false);
+        if (!getConfig().getDev() && !event.getPlayer().getPersistentDataContainer().has(VanishCommand.VANISHED))
             Messages.INSTANCE.onJoin(event.getPlayer());
 
         if (PrisonGame.wardenenabled) {
@@ -139,6 +146,12 @@ public class PlayerJoinListener implements Listener {
                 case 1 -> PrisonGame.setGuard((Player) pe);
                 case 3 -> PrisonGame.setSwat((Player) pe);
                 default -> ((Player) pe).sendMessage("An error has occured.");
+            }
+        }
+        if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+            event.setJoinMessage("");
+            for(Player p : Bukkit.getOnlinePlayers()){
+                if(p.hasPermission("pbb.staff.vanish.seejoin")) p.sendMessage(ChatColor.RED+"[STAFF] "+event.getPlayer().getName()+" Joined in Vanish!");
             }
         }
     }

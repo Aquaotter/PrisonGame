@@ -33,7 +33,6 @@ public class VanishCommand implements CommandExecutor {
         }
 
         container.set(VANISHED, PersistentDataType.INTEGER, 1);
-
         for (var loopedPlayer : Bukkit.getOnlinePlayers())
             loopedPlayer.hidePlayer(PrisonGame.instance, player);
 
