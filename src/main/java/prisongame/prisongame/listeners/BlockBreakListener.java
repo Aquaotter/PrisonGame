@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
@@ -18,7 +19,7 @@ public class BlockBreakListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         if (event.getPlayer().getGameMode().equals(GameMode.SURVIVAL)) {
-            event.getPlayer().sendMessage("Wow! You managed to break a block in survival mode! This means the server is completely fucking broken, or it's reloading. Please tell agmass. Please.");
+            event.getPlayer().sendMessage("Wow! You managed to break a block in survival mode! This means the server is completely broken, or it's reloading. Please tell Aquaotter. Please.");
             event.setCancelled(true);
         } else if (event.getPlayer().getGameMode().equals(GameMode.ADVENTURE)) {
             event.setCancelled(true);
@@ -61,6 +62,18 @@ public class BlockBreakListener implements Listener {
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                     event.getBlock().setType(PrisonGame.oretypes[new Random().nextInt(0, PrisonGame.oretypes.length - 1)]);
                 }, 20 * 2);
+                Random rand = new Random();
+                float chance = 1.0f;
+                float comparison = rand.nextFloat() * 100;
+                if (chance >= comparison) {
+                    event.getPlayer().getInventory().addItem(new ItemStack(Material.COAL));
+                    rand = new Random();
+                }
+                chance = 2.0f;
+                comparison = rand.nextFloat() * 100;
+                if (chance >= comparison) {
+                    event.getPlayer().getInventory().addItem(new ItemStack(Material.RAW_IRON));
+                }
             }
         }
 

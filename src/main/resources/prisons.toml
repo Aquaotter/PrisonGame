@@ -2,7 +2,7 @@ default-prison = "gaeae"
 
 [prisons.gaeae]
 priority = 0
-selector-item = "minecraft:cobblestone"
+material = "minecraft:cobblestone"
 show-in-selector = true
 display-name = "&7Fortress of Gaeae"
 name = "Gaeae Fort"
@@ -19,7 +19,7 @@ bertrude = { world = "world", x = 70.5, y = -59.0, z = -137.5 }
 
 [prisons.hyper]
 priority = 1
-selector-item = "minecraft:quartz_block"
+material = "minecraft:quartz_block"
 show-in-selector = true
 display-name = "&fHypertech"
 name = "HyperTech"
@@ -36,7 +36,7 @@ bertrude = { world = "world", x = 0.5, y = -59.0, z = -996.5 }
 
 [prisons.endmap]
 priority = 2
-selector-item = "minecraft:ender_pearl"
+material = "minecraft:ender_pearl"
 show-in-selector = false
 display-name = "&5The End?"
 name = "The End?"
@@ -53,7 +53,7 @@ bertrude = { world = "endprison", x = -100000.0, y = 256.0, z = -100000.0 }
 
 [prisons.train]
 priority = 3
-selector-item = "minecraft:crimson_planks"
+material = "minecraft:crimson_planks"
 show-in-selector = true
 display-name = "&eTrain"
 name = "Train"
@@ -70,7 +70,7 @@ bertrude = { world = "world", x = 80.5, y = -54.0, z = 961.5 }
 
 [prisons.gladiator]
 priority = 4
-selector-item = "minecraft:stone_brick_slab"
+material = "minecraft:stone_brick_slab"
 show-in-selector = true
 display-name = "&fGladiator"
 name = "Gladiator"
@@ -87,7 +87,7 @@ bertrude = { world = "world", x = -2022.5, y = -60.0, z = 1957.5 }
 
 [prisons.island]
 priority = 5
-selector-item = "minecraft:sand"
+material = "minecraft:sand"
 show-in-selector = true
 display-name = "&6Island"
 name = "Island"
@@ -104,7 +104,7 @@ bertrude = { world = "world", x = 1981.5, y = -60.0, z = -1989.5 }
 
 [prisons.santa]
 priority = 6
-selector-item = "minecraft:snow_block"
+material = "minecraft:snow_block"
 show-in-selector = true
 display-name = "&lSanta's Workshop"
 name = "Santa's Workshop"
@@ -121,7 +121,7 @@ bertrude = { world = "world", x = 1957.5, y = -60.0, z = 2007.5 }
 
 [prisons.volcano]
 priority = 7
-selector-item = "minecraft:lava_bucket"
+material = "minecraft:lava_bucket"
 show-in-selector = true
 display-name = "&cVolcano"
 name = "Volcano"
@@ -138,7 +138,7 @@ bertrude = { world = "world", x = -2011.5, y = -60.0, z = -1965.5 }
 
 [prisons.boat]
 priority = 8
-selector-item = "minecraft:oak_boat"
+material = "minecraft:oak_boat"
 show-in-selector = false
 display-name = "&1Boat"
 name = "Boat"
@@ -151,11 +151,11 @@ prisoner = { world = "world", x = -993.0, y = -54.0, z = 7.0 }
 bm-in = { world = "world", x = -961.0, y = -59.0, z = 64.0 }
 bm-out = { world = "world", x = -999.5, y= -49.0, z = 7.0 }
 solitary = { world = "world", x = -988.0, y = -57.0, z = 18.0 }
-bertrude = { world = "world", x = -987.0, y = -49.0, z = 19.0 }
+bertrude = { world = "world", x = -988.5, y = -49.0, z = 19.0, yaw = 90.0, pitch = 0.0 }
 
 [prisons.nether]
 priority = 9
-selector-item = "minecraft:netherrack"
+material = "minecraft:netherrack"
 show-in-selector = false
 display-name = "&cNether"
 name = "Nether"
@@ -172,7 +172,7 @@ bertrude = { world = "world", x = 956.3, y = -38.0, z = -168.8 }
 
 [prisons.amongus]
 priority = 10
-selector-item = "minecraft:gray_concrete"
+material = "minecraft:gray_concrete"
 show-in-selector = true
 display-name = "&7Skeld"
 name = "Skeld"
@@ -189,7 +189,7 @@ bertrude = { world = "world", x = 1483.0, y = -34.0, z = 1502.0 }
 
 [prisons.ms]
 priority = 11
-selector-item = "minecraft:deepslate_tiles"
+material = "minecraft:deepslate_tiles"
 show-in-selector = true
 display-name = "&8Maximum Security"
 name = "Maximum Security"
@@ -206,7 +206,7 @@ bertrude = { world = "world", x = 705.5, y = -59.0, z = 692.5 }
 
 [prisons.rag]
 priority = 12
-selector-item = "minecraft:grass_block"
+material = "minecraft:grass_block"
 show-in-selector = true
 display-name = "&aRocksNGrass"
 name = "Rocks and Grass"
@@ -223,7 +223,7 @@ bertrude = { world = "world", x = 956.3, y = -38.0, z = -168.8 }
 
 [prisons.prisontest]
 priority = 13
-selector-item = "minecraft:milk_bucket"
+material = "minecraft:milk_bucket"
 show-in-selector = true
 display-name = "&cwhat the fuck is going on"
 name = "what the fuck is going on"
@@ -240,7 +240,7 @@ bertrude = { world = "world", x = 0.0, y = 0.0, z = 0.0 }
 
 [prisons.barreled]
 priority = 14
-selector-item = "minecraft:barrel"
+material = "minecraft:barrel"
 show-in-selector = true
 display-name = "&ebarreled"
 name = "Barreled"
@@ -253,11 +253,11 @@ prisoner = { world = "world", x = -972.30, y = -60.00, z = -987.67, yaw = -631.3
 bm-in = { world = "world", x = -996.15, y = -60.00, z = -944.45, yaw = -1530.68, pitch = 2.07 }
 bm-out = { world = "world", x = -992.44, y = -58.81, z = -991.34, yaw = -589.67, pitch = -0.01 }
 solitary = { world = "world", x = -968.80, y = -56.00, z = -999.48, yaw = -1448.23, pitch = 4.64 }
-bertrude = { world = "world", x = 0.0, y = 0.0, z = 0.0 }
+bertrude = { world = "world", x = -992.5, y = -60.0, z = -994.5, yaw = 90.0, pitch = 0.0 }
 
 [prisons.desert]
 priority = 15
-selector-item = "minecraft:chiseled_sandstone"
+material = "minecraft:chiseled_sandstone"
 show-in-selector = true
 display-name = "&6Desert"
 name = "Desert"
@@ -271,3 +271,139 @@ bm-in = { world = "world", x = -1039.5, y = -59.0, z = -1445.0 }
 bm-out = { world = "world", x = -1040.5, y = -60.0, z = -1546.5, yaw = -135.0, pitch = 0.0 }
 solitary = { world = "world", x = -1033.5, y = -49.0, z = -1563.5, yaw = -90.0, pitch = 0.0 }
 bertrude = { world = "world", x = -1032.5, y = -60.0, z = -1547.5, yaw = 90.0, pitch = 0.0 }
+
+[prisons.sky]
+priority = 16
+material = "minecraft:sculk_catalyst"
+show-in-selector = true
+display-name = "&bSky Islands"
+name = "Sky Islands"
+track-1 = { world = "world", x = 0.0, y = 0.0, z = 0.0 }
+track-2 = { world = "world", x = 0.0, y = 0.0, z = 0.0 }
+nurse-1 = { world = "world", x = 12057.5, y = 28.0, z = 12075.5, yaw = 180.0, pitch = 0.0 }
+nurse-2 = { world = "world", x = 12057.5, y = 28.0, z = 12075.5, yaw = 180.0, pitch = 0.0 }
+prisoner = { world = "world", x = 12057.5, y = 28.0, z = 12075.5, yaw = 180.0, pitch = 0.0 }
+warden = { world = "world", x = 11942.0, y = 50.0, z = 12161.0, yaw = 90.0, pitch = 0.0 }
+bm-in = { world = "world", x = 11984.5, y = 223.0, z = 11922.5 }
+bm-out = { world = "world", x = 12052.0, y = 27.0, z = 12067.5, yaw = -90.0, pitch = 0.0 }
+solitary = { world = "world", x = 12038.5, y = 30.0, z = 12068.5, yaw = -145.0, pitch = 0.0 }
+bertrude = { world = "world", x = 11993.5, y = 24.0, z = 12006.5, yaw = -90.0, pitch = 0.0 }
+
+[prisons.polus]
+priority = 17
+material = "minecraft:blue_terracotta"
+show-in-selector = false
+display-name = "&5Polus"
+name = "Polus"
+track-1 = { world = "world", x = 10938.0, y = -36.0, z = 11039.0 }
+track-2 = { world = "world", x = 10931.0, y = -32.0, z = 11031.0 }
+nurse-1 = { world = "world", x = 10898.5, y = -34.0, z = 10937.5 }
+nurse-2 = { world = "world", x = 10898.5, y = -34.0, z = 10937.5 }
+warden = { world = "world", x = 10924.0, y = -35.0, z = 11013.5 }
+prisoner = { world = "world", x = 10910.5, y = -40.0, z = 11002.5, yaw = -90.0, pitch = 0.0 }
+bm-in = { world = "world", x = 10914.5, y = -59.0, z = 10954.5, yaw = -180.0, pitch = 0.0 }
+bm-out = { world = "world", x = 10900.5, y = -35.0, z = 10974.5 }
+solitary = { world = "world", x = 10933.5, y = -35.0, z = 11045.5, yaw = -180.0, pitch = 0.0 }
+bertrude = { world = "world", x = 10901.5, y = -35.0, z = 10995.5, yaw = -90.0, pitch = 0.0 }
+
+[prisons.spongebob]
+priority = 18
+material = "minecraft:sponge"
+show-in-selector = true
+display-name = "&eSpongebob"
+name = "Spongebob"
+track-1 = { world = "world", x = 986.5, y = -15.0, z = -9984.5 }
+track-2 = { world = "world", x = 978.5, y = -19.0, z = -9976.5 }
+nurse-1 = { world = "world", x = 979.5, y = -15.0, z = -9995.0 }
+nurse-2 = { world = "world", x = 979.5, y = -15.0, z = -9995.0 }
+warden = { world = "world", x = 1031.5, y = -19.0, z = -10001.5, yaw = 90.0, pitch = 0.0 }
+prisoner = { world = "world", x = 981.5, y = -19.0, z = -9992.5, yaw = -90.0, pitch = 0.0 }
+bm-in = { world = "world", x = 996.5, y = -23.0, z = -10012.5 }
+bm-out = { world = "world", x = 1021.5, y = -19.0, z = -9962.5, yaw = -180.0, pitch = 0.0 }
+solitary = { world = "world", x = 1003.0, y = -19.0, z = -9967.5, yaw = 180.0, pitch = 0.0 }
+bertrude = { world = "world", x = 1024.5, y = -18.0, z = -9990.5, yaw = 90.0, pitch = 0.0 }
+
+[prisons.moonbase]
+priority = 19
+material = "minecraft:end_stone"
+show-in-selector = false
+display-name = "&5Moon Base"
+name = "Moon Base"
+track-1 = { world = "world", x = 986.5, y = -15.0, z = -9984.5 }
+track-2 = { world = "world", x = 978.5, y = -19.0, z = -9976.5 }
+nurse-1 = { world = "world", x = 979.5, y = -15.0, z = -9995.0 }
+nurse-2 = { world = "world", x = 979.5, y = -15.0, z = -9995.0 }
+warden = { world = "world", x = 1031.5, y = -19.0, z = -10001.5, yaw = 90.0, pitch = 0.0 }
+prisoner = { world = "moon", x = 0.5, y = 41.0, z = 0.5, yaw = -0.0, pitch = 0.0 }
+bm-in = { world = "world", x = 996.5, y = -23.0, z = -10012.5 }
+bm-out = { world = "world", x = 1021.5, y = -19.0, z = -9962.5, yaw = -180.0, pitch = 0.0 }
+solitary = { world = "world", x = 1003.0, y = -19.0, z = -9967.5, yaw = 180.0, pitch = 0.0 }
+bertrude = { world = "world", x = 1024.5, y = -18.0, z = -9990.5, yaw = 90.0, pitch = 0.0 }
+
+[prisons.backrooms]
+priority = 20
+material = "minecraft:stripped_oak_wood"
+show-in-selector = true
+display-name = "&6Backrooms"
+name = "Backrooms"
+track-1 = { world = "world", x = 0.0, y = 0.0, z = 0.0 }
+track-2 = { world = "world", x = 0.0, y = 0.0, z = 0.0 }
+nurse-1 = { world = "world", x = -4522.5, y = -58.4375, z = 2974.5, yaw = 90.0, pitch = 0.0 }
+nurse-2 = { world = "world", x = -4522.5, y = -58.4375, z = 2974.5, yaw = 90.0, pitch = 0.0 }
+warden = { world = "world", x = -4452.5, y = -54.0, z = 3035.0, yaw = 90.0, pitch = 0.0 }
+prisoner = { world = "world", x = -4503.5, y = -63.0, z = 2958.5, yaw = 0.0, pitch = 0.0 }
+bm-in = { world = "world", x = -4439.5, y = -57.0, z = 3065.5, yaw = -45.0, pitch = 0.0 }
+bm-out = { world = "world", x = -4450.5, y = -59.0, z = 3019.5, yaw = 90.0, pitch = 0.0 }
+solitary = { world = "world", x = -4472.5, y = -60.0, z = 3045.5, yaw = -180.0, pitch = 0.0 }
+bertrude = { world = "world", x = -4439.5, y = -59.0, z = 2972.5, yaw = -0.0, pitch = 0.0 }
+
+[prisons.icecave]
+priority = 21
+material = "minecraft:ice"
+show-in-selector = true
+display-name = "&bIce Cave"
+name = "Icecave"
+track-1 = { world = "world", x = -1394.0, y = -58.0, z = -1011.5 }
+track-2 = { world = "world", x = -1403.0, y = -54.0, z = -1021.5 }
+nurse-1 = { world = "world", x = -1431.5, y = -59.9, z = -1012.5, yaw = -28.95996, pitch = -1.3500171 }
+nurse-2 = { world = "world", x = -1431.5, y = -59.9, z = -1012.5, yaw = -28.95996, pitch = -1.3500171 }
+warden = { world = "world", x = -1352.6, y = -50.0, z = -982.0, yaw = 89.2, pitch = 0.75 }
+prisoner = { world = "world", x = -1431.5, y = -59.9, z = -1012.5, yaw = -28.95996, pitch = -1.3500171 }
+bm-in = { world = "world", x = -1396.3811797607832, y = -19.9375, z = -968.5284087548736, yaw = 138.28943, pitch = -2.1003113 }
+bm-out = { world = "world", x = -1374.6544724188886, y = -58.8125, z = -954.6291584246001, yaw = -25.499966, pitch = 16.35022 }
+solitary = { world = "world", x = -1346.5, y = -45.0, z = -967.5, yaw = 1.0, pitch = 1.8 }
+bertrude = { world = "world", x = -1379.5, y = -60.0, z = -984.5, yaw = 55.5, pitch = 0.75 }
+
+[prisons.titan]
+priority = 22
+material = "minecraft:snow"
+show-in-selector = true
+display-name = "&4Titan"
+name = "Titan"
+track-1 = { world = "world", x = -3967.0, y = -29.0, z = -3947.5 }
+track-2 = { world = "world", x = -3959.0, y = -24.0, z = -3943.5 }
+nurse-1 = { world = "world", x = -3954.5, y = -31.9, z = -3992.5 }
+nurse-2 = { world = "world", x = -3954.5, y = -31.9, z = -3992.5 }
+warden = { world = "world", x = -3963.6, y = -32.0, z = -4010.0, yaw = 89.2, pitch = 0.75 }
+prisoner = { world = "world", x = -3965.5, y = -32.0, z = -3991.5 }
+bm-in = { world = "world", x = -4010.660, y = -58.9375, z = -3981.5284087548736 }
+bm-out = { world = "world", x = -3965.5, y = -32.0, z = -3991.5 }
+solitary = { world = "world", x = -3957.5, y = -32.0, z = -3980.5, yaw = 1.0, pitch = 1.8 }
+bertrude = { world = "world", x = -0.5, y = -60.0, z = -0.5, yaw = 55.5, pitch = 0.75 }
+
+[prisons.mushroomkingdom]
+priority = 23
+material = "minecraft:red_mushroom_block"
+show-in-selector = true
+display-name = "&cMushroom Kingdom"
+name = "mushroomkingdom"
+track-1 = { world = "world", x = -2065.831361239711, y = -57.799999952316284, z = -1107.5285605706613 }
+track-2 = { world = "world", x = -2071.5459934686164, y = -60.0, z = -1150.4499961899724 }
+nurse-1 = { world = "world", x = -2112.502623202316, y = -60.0, z = -1140.4803659143874, yaw = -0.115776315, pitch = 1.200135 }
+nurse-2 = { world = "world", x = -2112.502623202316, y = -60.0, z = -1140.4803659143874, yaw = -0.115776315, pitch = 1.200135 }
+warden = { world = "world", x = -2024.6154881101656, y = -54.9375, z = -1144.300000011921, yaw = -1.9151001, pitch = 1.1997278 }
+prisoner = { world = "world", x = -2112.502623202316, y = -60.0, z = -1140.4803659143874, yaw = -0.115776315, pitch = 1.200135 }
+bm-in = { world = "world", x = -2067.4331133917754, y = -59.9375, z = -1037.597933256449, yaw = 0.62683105, pitch = 1.5002079 }
+bm-out = { world = "world", x = -2071.5459934686164, y = -60.0, z = -1150.4499961899724, yaw = 49.683426, pitch = -0.30033898 }
+solitary = { world = "world", x = -2024.2247434639885, y = -59.0, z = -1122.4972547795371, yaw = 75.63401, pitch = -0.15032156 }
+bertrude = { world = "world", x = -2101.5079187524066, y = -59.0, z = -1142.4790863751841, yaw = -46.46466, pitch = 8.399803 }

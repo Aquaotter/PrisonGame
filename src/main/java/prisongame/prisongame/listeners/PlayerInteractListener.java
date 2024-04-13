@@ -160,6 +160,13 @@ public class PlayerInteractListener implements Listener {
                             }else {
                                 Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 8.0 * MyTask.jobm);
                             }
+                            Random rand = new Random();
+                            float chance = 0.3f;
+                            float chanceaxe = 0.004f;
+                            float comparison = rand.nextFloat() * 100;
+                            if(chance >= comparison){
+                                event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
+                            }
                             event.getClickedBlock().setType(Material.BEDROCK);
                             event.getPlayer().setCooldown(Material.WOODEN_SHOVEL, 10);
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
@@ -938,6 +945,12 @@ public class PlayerInteractListener implements Listener {
                         }else {
                             Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.5 * MyTask.jobm);
                         }
+                        Random rand = new Random();
+                        float chance = 0.2f;
+                        float comparison = rand.nextFloat() * 100;
+                        if(chance >= comparison){
+                            event.getPlayer().getInventory().addItem(new ItemStack(Material.PAPER));
+                        }
                         event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, 5);
                     }
                 }
@@ -952,6 +965,12 @@ public class PlayerInteractListener implements Listener {
                                 Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.5 * MyTask.jobm);
                             }else {
                                 Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
+                            }
+                            Random rand = new Random();
+                            float chance = 0.1f;
+                            float comparison = rand.nextFloat() * 100;
+                            if(chance >= comparison){
+                                event.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
                             }
                         }
                     }

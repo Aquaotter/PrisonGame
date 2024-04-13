@@ -44,7 +44,22 @@ public class EntityDamageByEntityListener implements Listener {
             }
             if (PrisonGame.roles.get(a) == Role.PRISONER) {
                 if (a.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_AXE)) {
-                    a.sendMessage(ChatColor.GREEN + "You cannot use prison work tools to fight!");
+                    a.sendMessage(ChatColor.GREEN + "You cannot use LumberJack's Axe to fight!");
+                    event.setCancelled(true);
+                    return;
+                }
+                if (a.getInventory().getItemInMainHand().getType().equals(Material.IRON_PICKAXE)) {
+                    a.sendMessage(ChatColor.GREEN + "You cannot use Miner's Pickaxe to fight!");
+                    event.setCancelled(true);
+                    return;
+                }
+                if (a.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_SHOVEL)) {
+                    a.sendMessage(ChatColor.GREEN + "You cannot use Spoon/Shovel to fight!");
+                    event.setCancelled(true);
+                    return;
+                }
+                if (a.getInventory().getItemInMainHand().getType().equals(Material.CARROT_ON_A_STICK)) {
+                    a.sendMessage(ChatColor.GREEN + "You cannot use Plumber's Carrot on a stick to fight!");
                     event.setCancelled(true);
                     return;
                 }

@@ -100,7 +100,7 @@ public class PlayerDeathListener implements Listener {
                     event.setCancelled(true);
                     event.getEntity().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20 * 30, 255));
                     event.getEntity().addPotionEffect(PotionEffectType.DOLPHINS_GRACE.createEffect(20 * 30, 255));
-                    event.getEntity().sendTitle(ChatColor.RED + "HANDCUFFED!", "", 20, 160, 20);
+                    event.getEntity().sendTitle(ChatColor.RED + "HANDCUFFED!", ChatColor.GOLD+"by "+killer.getName(), 20, 160, 20);
                     Player p = event.getEntity();
                     p.getKiller().addPassenger(p);
                     event.getEntity().getKiller().sendMessage(ChatColor.GREEN + "Shift to drop players.");

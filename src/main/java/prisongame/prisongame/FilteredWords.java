@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class FilteredWords {
-    public static String filterMessage = "I FUCKING LOVE AMONG US!!! YESS!!! AMONGER!! SUSS!!! SUSSY!!! SUSSY BAKA!! SUSS!! WALTUH!! KINDA SUS WALTUH!!";
+    public static String filterMessage = "(Very Gamer Word)";
 
     private static String replaceConsecutiveDuplicates(String msg) {
         final Pattern pattern = Pattern.compile("(.)\\1*", Pattern.MULTILINE);

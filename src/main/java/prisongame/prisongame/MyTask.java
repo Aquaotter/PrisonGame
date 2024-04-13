@@ -33,6 +33,7 @@ import java.text.DecimalFormat;
 import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class MyTask extends BukkitRunnable {
+    public static NamespacedKey VANISHED = new NamespacedKey(PrisonGame.instance, "vanished");
 
     public static Integer jobm = 1;
     static Boolean hasAlerted = true;
@@ -291,7 +292,8 @@ public class MyTask extends BukkitRunnable {
                 Double taxcount = 0.0;
                 DecimalFormat numberFormat = new DecimalFormat("#0.0");
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER) {
+                    var container = p.getPersistentDataContainer();
+                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER && !container.has(VANISHED) && !PrisonGame.builder.get(p)) {
                         Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
                         p.sendTitle("", ChatColor.RED + "COME TO ROLL CALL NEXT TIME!", 0, 60, 0);
                         if (PrisonGame.hardmode.get(p)) {
@@ -856,6 +858,17 @@ public class MyTask extends BukkitRunnable {
                 p.setDisplayName(p.getDisplayName().replace("VISITOR", "i wish he was a prisoner"));
                 p.setDisplayName(p.getDisplayName().replace("CRIMINAL", "*snore* mimimimimi"));
             }
+            /*if (p.getName().contains("_Aquaotter_")) {
+                p.setDisplayName(p.getDisplayName().replace("FUNDER", "wait hold up this ain't a role?"));
+                p.setDisplayName(p.getDisplayName().replace("WARDEN", "testing ig?"));
+                p.setDisplayName(p.getDisplayName().replace("GUARD", "why not nurse?"));
+                p.setDisplayName(p.getDisplayName().replace("NURSE", "i am male.."));
+                p.setDisplayName(p.getDisplayName().replace("SWAT", "FBI OPEN UP"));
+                p.setDisplayName(p.getDisplayName().replace("PRISONER", "don't ping me :)"));
+                p.setDisplayName(p.getDisplayName().replace("SOLITARY", "why are we here just to suffer.."));
+                p.setDisplayName(p.getDisplayName().replace("VISITOR", "this isn't a role either?!"));
+                p.setDisplayName(p.getDisplayName().replace("CRIMINAL", "MASTER MIND"));
+            }*/
             if (p.getLocation().getBlockY() == -60 && p.getLocation().clone().subtract(0.0, 1.0, 0.0).getBlock().getType() == Material.SAND && PrisonGame.active.getName().equals("Train") && PrisonGame.isInside(p, PrisonGame.nl("world", 27D, -61D, 920D, 0f, 0f), PrisonGame.nl("world", 129D, 8D, 1041D, 0f, 0f))) {
                 p.damage(999);
             }

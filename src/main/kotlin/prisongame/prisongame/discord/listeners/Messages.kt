@@ -23,7 +23,7 @@ object Messages : ListenerAdapter() {
 
         if (attacker != null)
             message = message.replace(attacker.name, "**${attacker.name}**")
-
+            message = message.replace("§", " ")
         chatChannel.sendMessage(message).queue();
     }
 

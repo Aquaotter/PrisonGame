@@ -1,6 +1,7 @@
 package prisongame.prisongame.commands.staff;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +20,6 @@ public class VanishCommand implements CommandExecutor {
             sender.sendMessage(PrisonGame.mm.deserialize("<red>Only players can run this command/"));
             return true;
         }
-
         var container = player.getPersistentDataContainer();
 
         if (container.has(VANISHED)) {

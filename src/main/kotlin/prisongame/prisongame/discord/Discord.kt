@@ -49,12 +49,12 @@ fun setup() {
         Command.slash("ban", "Ban players from PrisonButBad.")
             .addOption(OptionType.STRING, "player", "The player to ban.", true, true)
             .addOption(OptionType.STRING, "duration", "The ban duration.", true)
-            .addOption(OptionType.STRING, "reason", "The ban reason.", false)
+            .addOption(OptionType.STRING, "reason", "The ban reason.", true)
             .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
         Command.slash("mute", "Mute players on PrisonButBad.")
             .addOption(OptionType.STRING, "player", "The player to mute.", true, true)
             .addOption(OptionType.STRING, "duration", "The mute duration.", true)
-            .addOption(OptionType.STRING, "reason", "The mute reason.", false)
+            .addOption(OptionType.STRING, "reason", "The mute reason.", true)
             .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
         Command.slash("unban", "Unban players from PrisonButBad.")
             .addOption(OptionType.STRING, "player", "The player to unban.", true, true)

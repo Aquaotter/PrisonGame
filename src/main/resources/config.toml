@@ -42,7 +42,6 @@ help = { args = [""], description = "Shows you this menu." }
 solitary = { args = ["name"], description = "Sends a player to solitary, later to torture them. <red>[PLAYER MUST BE DEAD]" }
 target = { args = ["name"], description = "Turns a player in a target." }
 prefix = { args = ["prefix"], description = "Adds a prefix to your name." }
-femboys = { args = [""], description = "Toggles femboy mode for nurses." }
 fire = { args = ["guard name"], description = "Fires a guard from their job" }
 resign = { args = [""], description = "Resigns you from your job." }
 release = { args = ["name"], description = "Releases a player from solitary." }

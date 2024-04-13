@@ -20,7 +20,7 @@ public class PlayerInteractAtEntityListener implements Listener {
         if (event.getRightClicked().getType().equals(EntityType.VILLAGER)) {
             event.setCancelled(true);
         }
-        if (event.getRightClicked().equals(PrisonGame.bertrude)) {
+        if (event.getRightClicked().getName().equals("bertrude (real settings)")) {
             event.getPlayer().sendMessage("hello i am bertrude");
             event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
             Inventory inv = Bukkit.createInventory(null, 9, "bertrude");
