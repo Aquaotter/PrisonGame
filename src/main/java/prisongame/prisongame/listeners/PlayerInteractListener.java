@@ -967,7 +967,7 @@ public class PlayerInteractListener implements Listener {
                                 Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
                             }
                             Random rand = new Random();
-                            float chance = 0.1f;
+                            float chance = 0.75f;
                             float comparison = rand.nextFloat() * 100;
                             if(chance >= comparison){
                                 event.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));

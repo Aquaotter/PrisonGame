@@ -48,11 +48,11 @@ public class EntityDamageByEntityListener implements Listener {
                     event.setCancelled(true);
                     return;
                 }
-                if (a.getInventory().getItemInMainHand().getType().equals(Material.IRON_PICKAXE)) {
+                /*if (a.getInventory().getItemInMainHand().getType().equals(Material.IRON_PICKAXE)) {
                     a.sendMessage(ChatColor.GREEN + "You cannot use Miner's Pickaxe to fight!");
                     event.setCancelled(true);
                     return;
-                }
+                }*/
                 if (a.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_SHOVEL)) {
                     a.sendMessage(ChatColor.GREEN + "You cannot use Spoon/Shovel to fight!");
                     event.setCancelled(true);
