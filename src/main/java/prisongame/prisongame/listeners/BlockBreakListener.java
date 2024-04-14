@@ -5,10 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -74,8 +76,21 @@ public class BlockBreakListener implements Listener {
                 if (chance >= comparison) {
                     event.getPlayer().getInventory().addItem(new ItemStack(Material.RAW_IRON));
                 }
+                TryAxe(event.getPlayer());
             }
         }
 
+    }
+    public void TryAxe(Player p){
+        Boolean IsEscaped = PrisonGame.roles.get(p) == Role.PRISONER && PrisonGame.escaped.get(p);
+        Random rand = new Random();
+        float crimchance = 0.0133315f;
+        float chance = 	0.00010f;
+        if(IsEscaped)chance = crimchance;
+        float comparison = rand.nextFloat() * 100;
+        if(chance >= comparison){
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+p.getName()+" netherite_axe{Unbreakable:1,display:{Name:'[{\"text\":\"Brachydios\",\"bold\":true,\"color\":\"gold\"}]',Lore:['[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"(1 in 25,000)\",\"italic\":false}]']},Enchantments:[{id:vanishing_curse,lvl:1},{id:knockback,lvl:1},{id:sharpness,lvl:2}]} 1");
+            Bukkit.broadcastMessage(ChatColor.GOLD+p.getName() + " got Branchy axe (RUN FOR YOUR LIFE)");
+        }
     }
 }

@@ -22,6 +22,7 @@ public class EntityDismountListener implements Listener {
 
         if (!(passenger instanceof Player player && vehicle instanceof Player))
             return;
+        if(!player.hasPotionEffect(PotionEffectType.WEAKNESS)) return;
 
         if (!player.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE))
             return;

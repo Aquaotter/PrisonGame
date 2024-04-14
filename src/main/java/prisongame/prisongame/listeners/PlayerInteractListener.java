@@ -23,6 +23,7 @@ import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.config.Prison;
+import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -162,13 +163,13 @@ public class PlayerInteractListener implements Listener {
                             }
                             Random rand = new Random();
                             float chance = 0.3f;
-                            float chanceaxe = 0.004f;
                             float comparison = rand.nextFloat() * 100;
                             if(chance >= comparison){
                                 event.getPlayer().getInventory().addItem(new ItemStack(Material.BEETROOT_SOUP));
                             }
                             event.getClickedBlock().setType(Material.BEDROCK);
                             event.getPlayer().setCooldown(Material.WOODEN_SHOVEL, 10);
+                            TryAxe(event.getPlayer());
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                                 event.getClickedBlock().setType(Material.COARSE_DIRT);
                             }, 20 * 10);
@@ -335,6 +336,16 @@ public class PlayerInteractListener implements Listener {
                     inv.addItem(PrisonGame.createGuiItem(Material.GRAY_STAINED_GLASS_PANE, ""));
                     inv.addItem(PrisonGame.createGuiItem(Material.GRAY_STAINED_GLASS_PANE, ""));
                     event.getPlayer().openInventory(inv);
+                }
+                if(sign.getLine(1).equals("Sharpshooter")){
+                    if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())) {
+                        if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 3000.0) {
+                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 3000);
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+event.getPlayer().getName()+" bow{display:{Name:'[{\"text\":\"Sharpshooter\",\"italic\":false,\"color\":\"red\"}]',Lore:['[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"(CRIMINAL EXCLUSIVE)\",\"italic\":false}]']},Enchantments:[{id:vanishing_curse,lvl:1},{id:power,lvl:1},{id:punch,lvl:1}]} 1");
+                        }
+                    }else{
+                        event.getPlayer().sendMessage(ChatColor.RED+"ONLY CRIMINAL CAN USE THIS SIGN!");
+                    }
                 }
                 if (sign.getLine(1).equals("Switch Maps")) {
                     if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
@@ -952,6 +963,7 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().getInventory().addItem(new ItemStack(Material.PAPER));
                         }
                         event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, 5);
+                        TryAxe(event.getPlayer());
                     }
                 }
             }
@@ -967,11 +979,12 @@ public class PlayerInteractListener implements Listener {
                                 Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
                             }
                             Random rand = new Random();
-                            float chance = 0.1f;
+                            float chance = 0.75f;
                             float comparison = rand.nextFloat() * 100;
                             if(chance >= comparison){
                                 event.getPlayer().getInventory().addItem(new ItemStack(Material.STICK));
                             }
+                            TryAxe(event.getPlayer());
                         }
                     }
                 }
@@ -1110,5 +1123,17 @@ public class PlayerInteractListener implements Listener {
             return Color.BLACK;
 
         return leatherMeta.getColor();
+    }
+    public void TryAxe(Player p){
+        Boolean IsEscaped = PrisonGame.roles.get(p) == Role.PRISONER && PrisonGame.escaped.get(p);
+        Random rand = new Random();
+        float crimchance = 0.0133315f;
+        float chance = 	0.00010f;
+        if(IsEscaped)chance = crimchance;
+        float comparison = rand.nextFloat() * 100;
+        if(chance >= comparison){
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+p.getName()+" netherite_axe{Unbreakable:1,display:{Name:'[{\"text\":\"Brachydios\",\"bold\":true,\"color\":\"gold\"}]',Lore:['[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"(1 in 10,000)\",\"italic\":false}]']},Enchantments:[{id:vanishing_curse,lvl:1},{id:knockback,lvl:1},{id:sharpness,lvl:2}]} 1");
+            Bukkit.broadcastMessage(ChatColor.GOLD+p.getName() + " got Branchy axe (RUN FOR YOUR LIFE)");
+        }
     }
 }

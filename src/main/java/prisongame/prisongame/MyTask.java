@@ -293,7 +293,7 @@ public class MyTask extends BukkitRunnable {
                 DecimalFormat numberFormat = new DecimalFormat("#0.0");
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     var container = p.getPersistentDataContainer();
-                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER && !container.has(VANISHED) && !PrisonGame.builder.get(p)) {
+                    if (p.hasPotionEffect(PotionEffectType.GLOWING) && !PrisonGame.escaped.get(p) && PrisonGame.roles.get(p) == Role.PRISONER ) {
                         Bukkit.broadcastMessage(ChatColor.RED + p.getName() + ChatColor.GOLD + " didn't come to roll call! " + ChatColor.RED + "Kill them for 100 dollars!");
                         p.sendTitle("", ChatColor.RED + "COME TO ROLL CALL NEXT TIME!", 0, 60, 0);
                         if (PrisonGame.hardmode.get(p)) {

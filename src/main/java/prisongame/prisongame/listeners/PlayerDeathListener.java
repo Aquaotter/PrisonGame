@@ -14,6 +14,8 @@ import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
+import java.util.Random;
+
 import static prisongame.prisongame.config.ConfigKt.getConfig;
 
 public class PlayerDeathListener implements Listener {
@@ -69,7 +71,48 @@ public class PlayerDeathListener implements Listener {
                         p.getKiller().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 5, 0));
                     }
                 }
+                // =-=-= Criminal Kills Guard/Warden/Swat gets money! (This is prob better way to do this... NOTE)
+                boolean IsEscaped = PrisonGame.roles.get(killer) == Role.PRISONER && PrisonGame.escaped.get(killer);
+                String roleKilled = "None";
+                String amountKilledFor = "0";
+                if(IsEscaped){
+                    if(PrisonGame.roles.get(p) == Role.WARDEN){
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 750);
+                        amountKilledFor = "750";
+                        roleKilled = ChatColor.RED+"Warden";
+                    }
+                    if(PrisonGame.roles.get(p) == Role.SWAT){
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 300);
+                        amountKilledFor = "300";
+                        roleKilled = ChatColor.GRAY+"Swat";
+                    }
+                    if(PrisonGame.roles.get(p) == Role.GUARD){
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 150);
+                        amountKilledFor = "150";
+                        roleKilled = ChatColor.BLUE+"Guard";
+                    }
+                    if(PrisonGame.roles.get(p) == Role.NURSE){
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 100);
+                        amountKilledFor = "100";
+                        roleKilled = ChatColor.LIGHT_PURPLE+"Nurse";
+                    }
+                    killer.sendMessage(ChatColor.GREEN+"You have Gained "+amountKilledFor+" from killing the "+roleKilled+ ChatColor.GREEN +" as a Criminal!");
+                }
+                TryAxe(event.getPlayer());
+                // =-=-=
             }
+        }
+    }
+    public void TryAxe(Player p){
+        Boolean IsEscaped = PrisonGame.roles.get(p) == Role.PRISONER && PrisonGame.escaped.get(p);
+        Random rand = new Random();
+        float crimchance = 0.0133315f;
+        float chance = 	0.00010f;
+        if(IsEscaped)chance = crimchance;
+        float comparison = rand.nextFloat() * 100;
+        if(chance >= comparison){
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+p.getName()+" netherite_axe{Unbreakable:1,display:{Name:'[{\"text\":\"Brachydios\",\"bold\":true,\"color\":\"gold\"}]',Lore:['[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"(1 in 25,000)\",\"italic\":false}]']},Enchantments:[{id:vanishing_curse,lvl:1},{id:knockback,lvl:1},{id:sharpness,lvl:2}]} 1");
+            Bukkit.broadcastMessage(ChatColor.GOLD+p.getName() + " got Branchy axe (RUN FOR YOUR LIFE)");
         }
     }
 
