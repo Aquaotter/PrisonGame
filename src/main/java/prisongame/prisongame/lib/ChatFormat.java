@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 
@@ -31,6 +32,7 @@ public class ChatFormat implements ChatRenderer {
         var isWarden = role == Role.WARDEN;
 
         for (var player : Bukkit.getOnlinePlayers()) {
+            if(!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
             var name = player.getName();
 
             if (plainMessage.toLowerCase().contains(name.toLowerCase()) && Keys.PING_NOISES.get(player, 0) == 0)
@@ -40,10 +42,11 @@ public class ChatFormat implements ChatRenderer {
                         .build());
 
             message = message.replaceText((builder) -> builder
-                    .match("(?i)" + name)
-                    .replacement(Component
-                            .text("@" + name)
-                            .color(NamedTextColor.GREEN)));
+                        .match("(?i)" + name)
+                        .replacement(Component
+                                .text("@" + name)
+                                .color(NamedTextColor.GREEN)));
+            }
         }
 
         if (PrisonGame.FEMBOYS && role == Role.NURSE)

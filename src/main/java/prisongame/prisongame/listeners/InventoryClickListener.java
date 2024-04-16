@@ -300,6 +300,130 @@ public class InventoryClickListener implements Listener {
                         player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
                     }
                 }
+                if(name.equals(ChatColor.GOLD+"Lvl 2 Bounty Upgrade [MAX]")){
+                    event.setCancelled(true);
+                    if(Keys.SWORD_UPGRADE.get(player, 0) == 2) {
+                        player.sendMessage("You have already bought this!");
+                        return;
+                    }
+                    if(Keys.SWORD_UPGRADE.get(player, 0) == 1){
+                        if (Keys.MONEY.get(player, 0.0) >= 20000.0) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 20000);
+                            Keys.SWORD_UPGRADE.set(player, 2);
+                        }else{
+                            player.sendMessage("You need 20k to buy this!");
+                        }
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 1 Bounty Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.SWORD_UPGRADE.get(player, 0) >= 2){player.sendMessage("Sorry, This is already maxed out!");Keys.SWORD_UPGRADE.set(player, 2);return;}
+                    if(Keys.SWORD_UPGRADE.get(player, 0) == 0) {
+                        if (Keys.MONEY.get(player, 0.0) >= 7000.0) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 7000);
+                            Keys.SWORD_UPGRADE.set(player, 1);
+                        }else{
+                            player.sendMessage("You need 7k to buy this!");
+                        }
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 3 Mining Upgrade [MAX]")){
+                    event.setCancelled(true);
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) == 0){player.sendMessage("Sorry, You need to buy `Lvl 1 Mining Upgrade`!");return;}
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) == 1){player.sendMessage("Sorry, You need to buy `Lvl 2 Mining Upgrade`!");return;}
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) >= 3){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) == 2) {
+                        if (Keys.MONEY.get(player, 0.0) >= 55000.0) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 55000);
+                            Keys.PICKAXE_UPGRADE.set(player, 3);
+                        }else{
+                            player.sendMessage("You need 55k to buy this!");
+                        }
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 2 Mining Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) == 0){player.sendMessage("Sorry, You need to buy `Lvl 1 Mining Upgrade`!");return;}
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) >= 2){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) == 1) {
+                        if (Keys.MONEY.get(player, 0.0) >= 20000.0) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 20000);
+                            Keys.PICKAXE_UPGRADE.set(player, 2);
+                        }else{
+                            player.sendMessage("You need 20k to buy this!");
+                        }
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 1 Mining Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) >= 1){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if (Keys.MONEY.get(player, 0.0) >= 7000.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 7000);
+                        Keys.PICKAXE_UPGRADE.set(player, 1);
+                    }else{
+                        player.sendMessage("You need 7k to buy this!");
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 1 Shoveling Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.SHOVELING_UPGRADE.get(player, 0) >= 1){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if (Keys.MONEY.get(player, 0.0) >= 15000.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 15000);
+                        Keys.SHOVELING_UPGRADE.set(player, 1);
+                    }else{
+                        player.sendMessage("You need 15k to buy this!");
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 2 Shoveling Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.SHOVELING_UPGRADE.get(player, 0) == 0){player.sendMessage("Sorry, You need to buy `Lvl 1 Shoveling Upgrade`!");return;}
+                    if(Keys.SHOVELING_UPGRADE.get(player, 0) >= 2){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if(Keys.SHOVELING_UPGRADE.get(player, 0) == 1) {
+                        if (Keys.MONEY.get(player, 0.0) >= 30000.0) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 30000);
+                            Keys.SHOVELING_UPGRADE.set(player, 2);
+                        }else{
+                            player.sendMessage("You need 30k to buy this!");
+                        }
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 3 Plumber Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) == 0){player.sendMessage("Sorry, You need to buy `Lvl 1 Plumber Upgrade`!");return;}
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) == 1){player.sendMessage("Sorry, You need to buy `Lvl 2 Plumber Upgrade`!");return;}
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) >= 3){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) == 2) {
+                        if (Keys.MONEY.get(player, 0.0) >= 50000.0) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 50000);
+                            Keys.PLUMBER_UPGRADE.set(player, 3);
+                        }else{
+                            player.sendMessage("You need 50k to buy this!");
+                        }
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 2 Plumber Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) == 0){player.sendMessage("Sorry, You need to buy `Lvl 1 Plumber Upgrade`!");return;}
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) >= 2){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) == 1) {
+                        if (Keys.MONEY.get(player, 0.0) >= 17500.0) {
+                            Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 17500);
+                            Keys.PLUMBER_UPGRADE.set(player, 2);
+                        }else{
+                            player.sendMessage("You need 17.5k to buy this!");
+                        }
+                    }
+                }
+                if(name.equals(ChatColor.GOLD+"Lvl 1 Plumber Upgrade")){
+                    event.setCancelled(true);
+                    if(Keys.PLUMBER_UPGRADE.get(player, 0) >= 1){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if (Keys.MONEY.get(player, 0.0) >= 7500.0) {
+                        Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 7500);
+                        Keys.PLUMBER_UPGRADE.set(player, 1);
+                    }else{
+                        player.sendMessage("You need 7.5k to buy this!");
+                    }
+                }
 
                 if (name.equals(ChatColor.YELLOW + "Scrap Metal")) {
                     if (Keys.MONEY.get(player, 0.0) >= 150.0) {

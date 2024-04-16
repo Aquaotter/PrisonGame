@@ -1,7 +1,6 @@
 package prisongame.prisongame.listeners;
 
 import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.BlockState;
@@ -18,12 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.config.Prison;
-import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -156,10 +153,20 @@ public class PlayerInteractListener implements Listener {
                 if (event.getItem() != null) {
                     if (event.getItem().getType().equals(Material.WOODEN_SHOVEL)) {
                         if (!event.getPlayer().hasCooldown(Material.WOODEN_SHOVEL)) {
+                            double paidedamount = 0;
+                            double shovelingLvl = Keys.SHOVELING_UPGRADE.get(event.getPlayer(), 0);
+                            double increasearg = 0;
+                            double normalamount = 8.0;
+                            double escapeamount = 10.0;
+                            if(shovelingLvl==1) increasearg=1.25;
+                            if(shovelingLvl==2) increasearg=1.5;
+                            if(shovelingLvl == 0) shovelingLvl=0;
                             if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
-                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 10.0 * MyTask.jobm);
+                                paidedamount=(escapeamount*increasearg)+escapeamount;
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + paidedamount * MyTask.jobm);
                             }else {
-                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 8.0 * MyTask.jobm);
+                                paidedamount=(normalamount*increasearg)+normalamount;
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + paidedamount * MyTask.jobm);
                             }
                             Random rand = new Random();
                             float chance = 0.3f;
@@ -316,6 +323,22 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.BIRCH_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if(sign.getLine(1).equals("Mining Upgrade")){
+                    if(Keys.PICKAXE_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 3);
+                    OpenMiningUpgradeGui(event.getPlayer());
+                }
+                if(sign.getLine(1).equals("Bounty Upgrade")){
+                    if(Keys.SWORD_UPGRADE.get(event.getPlayer(), 0) >= 2) Keys.SWORD_UPGRADE.set(event.getPlayer(), 2);
+                    OpenBountyUpgradeGui(event.getPlayer());
+                }
+                if(sign.getLine(1).equals("Shovel Upgrade")){
+                    if(Keys.SHOVELING_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.SHOVELING_UPGRADE.set(event.getPlayer(), 3);
+                    OpenShovelingUpgradeGui(event.getPlayer());
+                }
+                if(sign.getLine(1).equals("Plumber Upgrade")){
+                    if(Keys.PLUMBER_UPGRADE.get(event.getPlayer(), 0) >= 2) Keys.PLUMBER_UPGRADE.set(event.getPlayer(), 2);
+                    OpenPlumberUpgradeGui(event.getPlayer());
+                }
                 if (sign.getLine(1).equals("TP To Island")) {
                     if (PrisonGame.roles.get(event.getPlayer()) != Role.PRISONER && PrisonGame.roles.get(event.getPlayer()) != Role.WARDEN && PrisonGame.warden != event.getPlayer()) {
                         event.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 1924, -60, -2027));
@@ -800,8 +823,14 @@ public class PlayerInteractListener implements Listener {
                 }
                 if (sign.getLine(2).equals("Mining")) {
                     if (!event.getPlayer().getInventory().contains(Material.IRON_PICKAXE)) {
+                        if(Keys.PICKAXE_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 3);
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 1);
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getPlayer().getName() + " iron_pickaxe{Damage:36,Unbreakable:1b,display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},CanDestroy:[deepslate_copper_ore,deepslate_emerald_ore,deepslate_gold_ore,deepslate_lapis_ore,deepslate_redstone_ore]} 1");
+                        int pickaxelvl = Keys.PICKAXE_UPGRADE.get(event.getPlayer(), 0);
+                        if(pickaxelvl == 0) {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + event.getPlayer().getName() + " iron_pickaxe{Damage:36,Unbreakable:1b,display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},CanDestroy:[deepslate_copper_ore,deepslate_emerald_ore,deepslate_gold_ore,deepslate_lapis_ore,deepslate_redstone_ore]} 1");
+                        }else{
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+event.getPlayer().getName()+" iron_pickaxe{display:{Name:'[{\"text\":\"Prisoner\\'s Pickaxe\",\"italic\":false}]'},Enchantments:[{id:vanishing_curse,lvl:1},{id:efficiency,lvl:"+pickaxelvl+"}],CanDestroy:[deepslate_gold_ore,deepslate_lapis_ore,deepslate_copper_ore,deepslate_emerald_ore,deepslate_redstone_ore]} 1");
+                        }
                         event.getPlayer().sendMessage(ChatColor.GRAY + "Mine Ores with the pickaxe.");
                     } else {
                         event.getPlayer().sendMessage(ChatColor.RED + "You already have a pickaxe!");
@@ -854,6 +883,9 @@ public class PlayerInteractListener implements Listener {
                             ItemStack card = new ItemStack(Material.WOODEN_SWORD);
                             ItemMeta cardm = card.getItemMeta();
                             cardm.setDisplayName(ChatColor.RED + "Bounty Hunter's Knife");
+                            if(Keys.SWORD_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.SWORD_UPGRADE.set(event.getPlayer(), 2);
+                            int bountyhunterlvl = Keys.SWORD_UPGRADE.get(event.getPlayer(), 0);
+                            if(bountyhunterlvl >= 1)cardm.addEnchant(Enchantment.LOOT_BONUS_MOBS, bountyhunterlvl, false);
                             card.setItemMeta(cardm);
                             event.getPlayer().getInventory().addItem(card);
                             event.getPlayer().sendMessage(ChatColor.RED + "Kill criminals (Glowing people).");
@@ -962,7 +994,12 @@ public class PlayerInteractListener implements Listener {
                         if(chance >= comparison){
                             event.getPlayer().getInventory().addItem(new ItemStack(Material.PAPER));
                         }
-                        event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, 5);
+                        double plumberlvl = Keys.PLUMBER_UPGRADE.get(event.getPlayer(), 0);
+                        int decreaseperctange = 5;
+                        if(plumberlvl==1) decreaseperctange=4; // 4.5
+                        if(plumberlvl==2) decreaseperctange=3; // 4
+                        if(plumberlvl==3) decreaseperctange=2; // 3.25
+                        event.getPlayer().setCooldown(Material.CARROT_ON_A_STICK, decreaseperctange);
                         TryAxe(event.getPlayer());
                     }
                 }
@@ -1135,5 +1172,150 @@ public class PlayerInteractListener implements Listener {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+p.getName()+" netherite_axe{Unbreakable:1,display:{Name:'[{\"text\":\"Brachydios\",\"bold\":true,\"color\":\"gold\"}]',Lore:['[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"(1 in 10,000)\",\"italic\":false}]']},Enchantments:[{id:vanishing_curse,lvl:1},{id:knockback,lvl:1},{id:sharpness,lvl:2}]} 1");
             Bukkit.broadcastMessage(ChatColor.GOLD+p.getName() + " got Branchy axe (RUN FOR YOUR LIFE)");
         }
+    }
+    public void OpenMiningUpgradeGui(Player p){
+        Inventory miningUpgradeGui = Bukkit.createInventory(null, 9*3, "Mining Upgrade");
+        ItemStack guiItem1 = new ItemStack(Material.IRON_PICKAXE); // LVL 1 Mining Upgrade
+        ItemStack guiItem2 = new ItemStack(Material.IRON_PICKAXE); // LVL 2 Mining Upgrade
+        ItemStack guiItem3 = new ItemStack(Material.IRON_PICKAXE); // LVL 3 Mining Upgrade
+        ItemMeta guiItem1m = guiItem1.getItemMeta();
+        ItemMeta guiItem2m = guiItem2.getItemMeta();
+        ItemMeta guiItem3m = guiItem3.getItemMeta();
+        List<String> lore = new ArrayList<String>();
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Cost: 7k "+ChatColor.GRAY+"(7000)");
+        guiItem1m.setLore(lore);
+        guiItem1m.setDisplayName(ChatColor.GOLD+"Lvl 1 Mining Upgrade");
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Efficacy 1");
+        guiItem1.setItemMeta(guiItem1m);
+        List<String> lore2 = new ArrayList<String>();
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Cost: 20k "+ChatColor.GRAY+"(20000)");
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Efficacy 2");
+        guiItem2m.setLore(lore2);
+        guiItem2m.setDisplayName(ChatColor.GOLD+"Lvl 2 Mining Upgrade");
+        guiItem2.setItemMeta(guiItem2m);
+        List<String> lore3 = new ArrayList<String>();
+        lore3.add("");
+        lore3.add(ChatColor.GOLD+"Cost: 55k "+ChatColor.GRAY+"(55000)");
+        lore3.add("");
+        lore3.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Efficacy 3");
+        guiItem3m.setLore(lore3);
+        guiItem3m.setDisplayName(ChatColor.GOLD+"Lvl 3 Mining Upgrade [MAX]");
+        guiItem3.setItemMeta(guiItem3m);
+        for (int i = 0; i < 9*3; i++) {
+            miningUpgradeGui.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
+        }
+        miningUpgradeGui.setItem(10,guiItem1);
+        miningUpgradeGui.setItem(13,guiItem2);
+        miningUpgradeGui.setItem(16,guiItem3);
+        p.openInventory(miningUpgradeGui);
+    }
+    public void OpenBountyUpgradeGui(Player p){
+        Inventory miningUpgradeGui = Bukkit.createInventory(null, 9*3, "Bounty Upgrade");
+        ItemStack guiItem1 = new ItemStack(Material.WOODEN_SWORD); // LVL 1 Bounty Upgrade
+        ItemStack guiItem2 = new ItemStack(Material.WOODEN_SWORD); // LVL 2 Bounty Upgrade
+        ItemMeta guiItem1m = guiItem1.getItemMeta();
+        ItemMeta guiItem2m = guiItem2.getItemMeta();
+        List<String> lore = new ArrayList<String>();
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Cost: 7k "+ChatColor.GRAY+"(7000)");
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Fortune 1 \nIncreased Money Guard Roles Drop!");
+        guiItem1m.setLore(lore);
+        guiItem1m.setDisplayName(ChatColor.GOLD+"Lvl 1 Bounty Upgrade");
+        guiItem1.setItemMeta(guiItem1m);
+        List<String> lore2 = new ArrayList<String>();
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Cost: 20k "+ChatColor.GRAY+"(20000)");
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Fortune 2 \nIncreased Money Guard Roles Drop!");
+        guiItem2m.setLore(lore2);
+        guiItem2m.setDisplayName(ChatColor.GOLD+"Lvl 2 Bounty Upgrade [MAX]");
+        guiItem2.setItemMeta(guiItem2m);
+        for (int i = 0; i < 9*3; i++) {
+            miningUpgradeGui.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
+        }
+        miningUpgradeGui.setItem(10,guiItem1);
+        miningUpgradeGui.setItem(16,guiItem2);
+        p.openInventory(miningUpgradeGui);
+    }
+    public void OpenShovelingUpgradeGui(Player p){
+        Inventory miningUpgradeGui = Bukkit.createInventory(null, 9*3, "Shoveling Upgrade");
+        ItemStack guiItem1 = new ItemStack(Material.WOODEN_SHOVEL); // LVL 1 Shoveling Upgrade
+        ItemStack guiItem2 = new ItemStack(Material.WOODEN_SHOVEL); // LVL 2 Shoveling Upgrade
+        ItemMeta guiItem1m = guiItem1.getItemMeta();
+        ItemMeta guiItem2m = guiItem2.getItemMeta();
+        //
+        List<String> lore = new ArrayList<String>();
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Cost: 15k "+ChatColor.GRAY+"(15000)");
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Fortune 1");
+        guiItem1m.setLore(lore);
+        guiItem1m.setDisplayName(ChatColor.GOLD+"Lvl 1 Shoveling Upgrade");
+        guiItem1.setItemMeta(guiItem1m);
+        //
+        List<String> lore2 = new ArrayList<String>();
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Cost: 30k "+ChatColor.GRAY+"(30000)");
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Fortune 2");
+        guiItem2m.setLore(lore2);
+        guiItem2m.setDisplayName(ChatColor.GOLD+"Lvl 2 Shoveling Upgrade");
+        guiItem2.setItemMeta(guiItem2m);
+        //
+        for (int i = 0; i < 9*3; i++) {
+            miningUpgradeGui.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
+        }
+        miningUpgradeGui.setItem(10,guiItem1);
+        miningUpgradeGui.setItem(16,guiItem2);
+        p.openInventory(miningUpgradeGui);
+    }
+    public void OpenPlumberUpgradeGui(Player p){
+        Inventory miningUpgradeGui = Bukkit.createInventory(null, 9*3, "Plumber Upgrade");
+        ItemStack guiItem1 = new ItemStack(Material.CARROT_ON_A_STICK); // LVL 1 Plumber Upgrade
+        ItemStack guiItem2 = new ItemStack(Material.CARROT_ON_A_STICK); // LVL 2 Plumber Upgrade
+        ItemStack guiItem3 = new ItemStack(Material.CARROT_ON_A_STICK); // LVL 3 Plumber Upgrade
+        ItemMeta guiItem1m = guiItem1.getItemMeta();
+        ItemMeta guiItem2m = guiItem2.getItemMeta();
+        ItemMeta guiItem3m = guiItem3.getItemMeta();
+        //
+        List<String> lore = new ArrayList<String>();
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Cost: 7.5k "+ChatColor.GRAY+"(7500)");
+        lore.add("");
+        lore.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Efficacy 1");
+        guiItem1m.setLore(lore);
+        guiItem1m.setDisplayName(ChatColor.GOLD+"Lvl 1 Plumber Upgrade");
+        guiItem1.setItemMeta(guiItem1m);
+        //
+        List<String> lore2 = new ArrayList<String>();
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Cost: 17.5k "+ChatColor.GRAY+"(17500)");
+        lore2.add("");
+        lore2.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Efficacy 2");
+        guiItem2m.setLore(lore2);
+        guiItem2m.setDisplayName(ChatColor.GOLD+"Lvl 2 Plumber Upgrade");
+        guiItem2.setItemMeta(guiItem2m);
+        //
+        List<String> lore3 = new ArrayList<String>();
+        lore3.add("");
+        lore3.add(ChatColor.GOLD+"Cost: 50k "+ChatColor.GRAY+"(50000)");
+        lore3.add("");
+        lore3.add(ChatColor.GOLD+"Perks:\n "+ChatColor.GRAY+"Efficacy 3");
+        guiItem3m.setLore(lore3);
+        guiItem3m.setDisplayName(ChatColor.GOLD+"Lvl 3 Plumber Upgrade");
+        guiItem3.setItemMeta(guiItem3m);
+        //
+        for (int i = 0; i < 9*3; i++) {
+            miningUpgradeGui.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
+        }
+        miningUpgradeGui.setItem(10,guiItem1);
+        miningUpgradeGui.setItem(13,guiItem2);
+        miningUpgradeGui.setItem(16,guiItem3);
+        p.openInventory(miningUpgradeGui);
     }
 }

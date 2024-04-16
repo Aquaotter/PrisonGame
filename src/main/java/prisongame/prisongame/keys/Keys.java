@@ -32,6 +32,10 @@ public interface Keys {
     Key<String> RANK_PREFIX = new Key<>("RANK_PREFIX", new NamespacedKey(PrisonGame.instance, "rankprefix"), KeyTypes.STRING);
     Key<Double> TRUST = new Key<>("TRUST", new NamespacedKey(PrisonGame.instance, "trust"), KeyTypes.DOUBLE);
     Key<Integer> GUARD_ELO = new Key<>("GUARD_ELO", new NamespacedKey(PrisonGame.instance, "elo"), KeyTypes.INTEGER);
+    Key<Integer> PICKAXE_UPGRADE = new Key<>("PICKAXE_UPGRADE", new NamespacedKey(PrisonGame.instance, "pickaxeupgrade"), KeyTypes.INTEGER);
+    Key<Integer> SWORD_UPGRADE = new Key<>("SWORD_UPGRADE", new NamespacedKey(PrisonGame.instance, "swordupgrade"), KeyTypes.INTEGER);
+    Key<Integer> SHOVELING_UPGRADE = new Key<>("SHOVELING_UPGRADE", new NamespacedKey(PrisonGame.instance, "shovelingupgrade"), KeyTypes.INTEGER);
+    Key<Integer> PLUMBER_UPGRADE = new Key<>("PLUMBER_UPGRADE", new NamespacedKey(PrisonGame.instance, "plumberupgrade"), KeyTypes.INTEGER);
 
     static @Nullable Key<?> valueOf(String name) {
         try {

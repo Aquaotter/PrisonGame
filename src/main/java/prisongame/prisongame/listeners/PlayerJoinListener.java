@@ -17,6 +17,7 @@ import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.danger.staff.SeasonCommand;
 import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.discord.listeners.Messages;
+import prisongame.prisongame.keys.Key;
 import prisongame.prisongame.keys.Keys;
 
 import java.io.IOException;
@@ -101,10 +102,17 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        //
+        if(Keys.PICKAXE_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 3);
+        if(Keys.SWORD_UPGRADE.get(event.getPlayer(), 0) >= 2) Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 2);
+        if(Keys.PLUMBER_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.PLUMBER_UPGRADE.set(event.getPlayer(), 3);
+        if(Keys.SHOVELING_UPGRADE.get(event.getPlayer(), 0) >= 2) Keys.SHOVELING_UPGRADE.set(event.getPlayer(), 2);
+        //
         if(event.getPlayer().isInvulnerable()) event.getPlayer().setInvulnerable(false);
         if (!getConfig().getDev() && !event.getPlayer().getPersistentDataContainer().has(VanishCommand.VANISHED))
             Messages.INSTANCE.onJoin(event.getPlayer());
-
+        if(Keys.PICKAXE_UPGRADE.get(event.getPlayer()) == null)Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 0);
+        if(Keys.SWORD_UPGRADE.get(event.getPlayer()) == null)Keys.SWORD_UPGRADE.set(event.getPlayer(), 0);
         if (PrisonGame.wardenenabled) {
             Player p = event.getPlayer();
             PrisonGame.trustlevel.put(event.getPlayer(), 0);

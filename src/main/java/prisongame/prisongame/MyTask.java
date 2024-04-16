@@ -1019,10 +1019,6 @@ public class MyTask extends BukkitRunnable {
                 }
             }*/
             bossbar.addPlayer(p);
-            if (p.getInventory().getItemInMainHand().getType().equals(Material.COOKED_CHICKEN)) {
-                p.kickPlayer("");
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + p.getName() + " 5m Abuse of Illegals [AUTO]");
-            }
             if (p.getInventory().getItemInMainHand().hasItemMeta()) {
                 if (p.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                     if (PrisonGame.roles.get(p) == Role.PRISONER) {

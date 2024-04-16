@@ -14,7 +14,7 @@ public class PlayerItemConsumeListener implements Listener {
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         if (event.getPlayer().hasCooldown(event.getItem().getType()))
             event.setCancelled(true);
-        if(event.getPlayer().hasPotionEffect(PotionEffectType.WEAKNESS)) {
+        if(event.getPlayer().hasPotionEffect(PotionEffectType.WEAKNESS) || event.getPlayer().hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(ChatColor.RED+"Sorry, You can't eat while being Hand Cuffed!");
             return;

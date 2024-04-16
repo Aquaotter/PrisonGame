@@ -61,11 +61,18 @@ public class PlayerDeathListener implements Listener {
                 p.getKiller().playSound(p.getKiller(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 2);
                 if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
                     p.getKiller().sendMessage(ChatColor.GREEN + "You gained a little bit of money for killing a criminal.");
+                    double GainCash = 0;
+                    double bountylvl = Keys.SWORD_UPGRADE.get(p, 0);
                     if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
-                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 125.0);
+                        if(bountylvl==1) GainCash = 212.0;
+                        if(bountylvl==2) GainCash = 343.75;
+                        if(bountylvl==0) GainCash = 125.0;
                     }else {
-                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 100.0);
+                        if(bountylvl==1) GainCash = 170.0;
+                        if(bountylvl==2) GainCash = 275.0;
+                        if(bountylvl==0) GainCash = 100.0;
                     }
+                    Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + GainCash);
                 } else {
                     if (PrisonGame.roles.get(p.getKiller()) == Role.PRISONER) {
                         p.getKiller().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 5, 0));
@@ -74,29 +81,37 @@ public class PlayerDeathListener implements Listener {
                 // =-=-= Criminal Kills Guard/Warden/Swat gets money! (This is prob better way to do this... NOTE)
                 boolean IsEscaped = PrisonGame.roles.get(killer) == Role.PRISONER && PrisonGame.escaped.get(killer);
                 String roleKilled = "None";
-                String amountKilledFor = "0";
+                double paidedamount = 0;
+                double bountylvl = Keys.SWORD_UPGRADE.get(p, 0);
+                double increasearg = 1;
+                double wardenDeathAmount = 750;
+                double guardDeathAmount = 150;
+                double swatDeathAmount = 300;
+                double nurseDeathAmount = 100;
+                if(bountylvl==1) increasearg=1.5;
+                if(bountylvl==2) increasearg=2;
                 if(IsEscaped){
                     if(PrisonGame.roles.get(p) == Role.WARDEN){
-                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 750);
-                        amountKilledFor = "750";
+                        paidedamount=wardenDeathAmount;
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + wardenDeathAmount);
                         roleKilled = ChatColor.RED+"Warden";
                     }
                     if(PrisonGame.roles.get(p) == Role.SWAT){
-                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 300);
-                        amountKilledFor = "300";
+                        paidedamount=(swatDeathAmount*increasearg)+swatDeathAmount;
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + paidedamount);
                         roleKilled = ChatColor.GRAY+"Swat";
                     }
                     if(PrisonGame.roles.get(p) == Role.GUARD){
-                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 150);
-                        amountKilledFor = "150";
+                        paidedamount=(guardDeathAmount*increasearg)+guardDeathAmount;
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + paidedamount);
                         roleKilled = ChatColor.BLUE+"Guard";
                     }
                     if(PrisonGame.roles.get(p) == Role.NURSE){
-                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + 100);
-                        amountKilledFor = "100";
+                        paidedamount=(nurseDeathAmount*increasearg)+nurseDeathAmount;
+                        Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + paidedamount);
                         roleKilled = ChatColor.LIGHT_PURPLE+"Nurse";
                     }
-                    killer.sendMessage(ChatColor.GREEN+"You have Gained "+amountKilledFor+" from killing the "+roleKilled+ ChatColor.GREEN +" as a Criminal!");
+                    killer.sendMessage(ChatColor.GREEN+"You have Gained "+paidedamount+" from killing the "+roleKilled+ ChatColor.GREEN +" as a Criminal!");
                 }
                 TryAxe(event.getPlayer());
                 // =-=-=

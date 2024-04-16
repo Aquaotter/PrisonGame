@@ -260,12 +260,16 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("builder").setExecutor(new BuilderCommand());
         this.getCommand("gangchat").setExecutor(new GangChatCommand());
         this.getCommand("setmoney").setExecutor(new SetMoneyCommand());
+        this.getCommand("inv").setExecutor(new InvCommand());
         this.getCommand("pbbreload").setExecutor(new PBBReloadCommand());
         this.getCommand("rstmoney").setExecutor(new ResetMoneyCommand());
-        //this.getCommand("enderchest").setExecutor(new EnderChestCommand());
+        this.getCommand("enderchest").setExecutor(new EnderChestCommand());
         this.getCommand("pbsettings").setExecutor(new PBSettingsCommand());
         this.getCommand("rstascen").setExecutor(new ResetAscensionCommand());
         this.getCommand("nerdcheatcommand").setExecutor(new NerdCheatCommand());
+        this.getCommand("forcemap").setExecutor(new ForceMapCommand());
+        this.getCommand("playtime").setExecutor(new PlayTimeCommand());
+        this.getCommand("joindate").setExecutor(new JoinDateCommand());
 
         this.getCommand("gangs").setTabCompleter(new GangsCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
@@ -275,6 +279,8 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("builder").setTabCompleter(new BuilderCompleter());
         this.getCommand("setmoney").setTabCompleter(new SetMoneyCompleter());
         this.getCommand("enderchest").setTabCompleter(new EnderChestCompleter());
+        this.getCommand("inv").setTabCompleter(new InvcommandCompleter());
+        this.getCommand("forcemap").setTabCompleter(new ForceMapCompleter());
         Bukkit.broadcastMessage("RELOAD: Loaded Commands");
     }
 

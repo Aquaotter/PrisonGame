@@ -103,3 +103,20 @@ commands:
   hello:
     description: Say hello and server/credit stats!
     usage: /<command>
+  inv:
+    description: Inspect/Clear inventory of provided player.
+    usage: /inv <inspect/clear> (player)
+    permission: pbb.inv
+    aliases: /inventory
+  forcemap:
+    description: Force the Change of current map towards whatever is provided
+    usage: /forcemap <MAPNAME>
+    permission: pbb.forcemap
+  joindate:
+    permission: pbb.joindate
+    usage: /joindate <player>
+    description: Gives the join date of a provided player!
+  playtime:
+    permission: pbb.playtime
+    usage: /playtime <player>
+    description: Gives the playtime of provided player!
