@@ -18,7 +18,7 @@ public class SwatCommand implements CommandExecutor {
                     Player g = Bukkit.getPlayer(args[0]);
                     if (g.isOnline() && g != sender) {
                         PrisonGame.askType.put(g, 3);
-                        sender.sendMessage(ChatColor.DARK_GRAY + "Succesfully asked player to be a guard!");
+                        sender.sendMessage(PrisonGame.mm.deserialize("<dark_gray>Successfully asked player to be a swat!"));
                         g.sendMessage(ChatColor.DARK_GRAY + "The wardens wants you to be a SWAT guard! use '/accept'");
                     } else {
                         sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player. If they're a guard/nurse, demote them, then promote them  to swat again!");

@@ -53,10 +53,10 @@ public class DefaultCommand implements CommandExecutor {
             for (Player pe : Bukkit.getOnlinePlayers()) {
                 if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
                     switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
-                        case 2 -> PrisonGame.setNurse((Player) pe);
-                        case 1 -> PrisonGame.setGuard((Player) pe);
-                        case 3 -> PrisonGame.setSwat((Player) pe);
-                        default -> ((Player) pe).sendMessage("An error has occured.");
+                        case 2 -> PrisonGame.setNurse((Player) pe, true);
+                        case 1 -> PrisonGame.setGuard((Player) pe, true);
+                        case 3 -> PrisonGame.setSwat((Player) pe, true);
+                        default -> ((Player) pe).sendMessage("An error has occurred.");
                     }
                 }
             }

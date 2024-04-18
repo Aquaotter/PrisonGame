@@ -55,9 +55,9 @@ public class ForceCommand implements CommandExecutor {
 
                         player.performCommand("warden");
                     }
-                    case SWAT -> PrisonGame.setSwat(player);
-                    case GUARD -> PrisonGame.setGuard(player);
-                    case NURSE -> PrisonGame.setNurse(player);
+                    case SWAT -> PrisonGame.setSwat(player, true);
+                    case GUARD -> PrisonGame.setGuard(player, true);
+                    case NURSE -> PrisonGame.setNurse(player, true);
                 }
 
             sender.sendMessage(PrisonGame.mm.deserialize(

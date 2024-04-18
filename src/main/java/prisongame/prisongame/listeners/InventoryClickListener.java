@@ -198,11 +198,13 @@ public class InventoryClickListener implements Listener {
                     }
 
                     if (name.equals(ChatColor.LIGHT_PURPLE + "-1 dollar")) {
-                        if (!player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) {
-                            event.setCancelled(true);
-                            player.damage(999999);
-                            Bukkit.broadcastMessage(player.getName() + " was robbed by bertrude (L)");
-                        }
+                        event.setCancelled(true);
+                        if(player.getGameMode().equals(GameMode.SPECTATOR)) return;
+                        if(player.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) return;
+                        if(player.hasPotionEffect(PotionEffectType.SLOW)) return;
+                        if(player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) return;
+                        player.damage(999999);
+                        Bukkit.broadcastMessage(player.getName() + " was robbed by bertrude (L)");
                     }
                     if (name.equals(ChatColor.LIGHT_PURPLE + "no warden spaces")) {
                         event.setCancelled(true);
@@ -344,7 +346,7 @@ public class InventoryClickListener implements Listener {
                 if(name.equals(ChatColor.GOLD+"Lvl 2 Mining Upgrade")){
                     event.setCancelled(true);
                     if(Keys.PICKAXE_UPGRADE.get(player, 0) == 0){player.sendMessage("Sorry, You need to buy `Lvl 1 Mining Upgrade`!");return;}
-                    if(Keys.PICKAXE_UPGRADE.get(player, 0) >= 2){player.sendMessage("Sorry, You have already bought this!");return;}
+                    if(Keys.PICKAXE_UPGRADE.get(player, 0) == 2){player.sendMessage("Sorry, You have already bought this!");return;}
                     if(Keys.PICKAXE_UPGRADE.get(player, 0) == 1) {
                         if (Keys.MONEY.get(player, 0.0) >= 20000.0) {
                             Keys.MONEY.set(player, Keys.MONEY.get(player, 0.0) - 20000);
