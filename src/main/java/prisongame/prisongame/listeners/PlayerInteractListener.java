@@ -21,6 +21,7 @@ import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.config.Prison;
+import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -268,7 +269,7 @@ public class PlayerInteractListener implements Listener {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+ event.getPlayer().getName()+" potion{custom_potion_effects:[{id:strength,duration:400,amplifier:0},{id:speed,duration:200,amplifier:2},{id:nausea,duration:140,amplifier:1},{id:poison,duration:100,amplifier:3}],display:{Name:'[\"\",{\"text\":\"Not Meth\",\"italic\":false,\"color\":\"yellow\"}]'}}");
                     }
                 }
-                if (MyTask.bossbar.getTitle().equals("Breakfast") || MyTask.bossbar.getTitle().equals("Lunch")) {
+                if (Schedule.bossBar.getTitle().equals("Breakfast") || Schedule.bossBar.getTitle().equals("Lunch")) {
                     if (sign.getLine(1).equals("Get Cafe")) {
                         if (PrisonGame.gotcafefood.getOrDefault(event.getPlayer(), false)) {
                             PrisonGame.gotcafefood.put(event.getPlayer(), true);
@@ -485,7 +486,7 @@ public class PlayerInteractListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("TP To Prison")) {
-                    if (!MyTask.bossbar.getTitle().equals("LIGHTS OUT")) {
+                    if (!Schedule.bossBar.getTitle().equals("LIGHTS OUT")) {
                         event.getPlayer().setCooldown(Material.IRON_DOOR, 20);
                         event.getPlayer().teleport(PrisonGame.active.getPrisoner().getLocation());
                     }

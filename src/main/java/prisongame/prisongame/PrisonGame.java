@@ -39,6 +39,7 @@ import prisongame.prisongame.config.ConfigKt;
 import prisongame.prisongame.config.FallbackConfigKt;
 import prisongame.prisongame.config.Prison;
 import prisongame.prisongame.discord.DiscordKt;
+import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
@@ -58,9 +59,9 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Boolean> escaped = new HashMap<>();
     public static HashMap<Player, Role> roles = new HashMap<>();
     public static HashMap<Player, Integer> askType = new HashMap<>();
-    static HashMap<Player, Integer> lastward = new HashMap<>();
-    static HashMap<Player, Integer> lastward2 = new HashMap<>();
-    static HashMap<Player, Integer> wardenban = new HashMap<>();
+    public static HashMap<Player, Integer> lastward = new HashMap<>();
+    public static HashMap<Player, Integer> lastward2 = new HashMap<>();
+    public static HashMap<Player, Integer> wardenban = new HashMap<>();
     public static HashMap<Player, String> word = new HashMap<>();
     static HashMap<Player, Integer> saidcycle = new HashMap<>();
     public static Integer BBpower = 100;
@@ -415,7 +416,7 @@ public final class PrisonGame extends JavaPlugin {
         new Data(PrisonGame.savedPlayerGuards).saveData("saveguard.data");
         SQL.close();
         bertrude.remove();
-        MyTask.bossbar.removeAll();
+        Schedule.bossBar.removeAll();
         DiscordKt.close();
     }
 
