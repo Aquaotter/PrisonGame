@@ -5,10 +5,8 @@ import net.kyori.adventure.title.TitlePart;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
-import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.keys.Keys;
-import prisongame.prisongame.lib.FeatureManager;
 import prisongame.prisongame.lib.Role;
 
 import java.time.Duration;

@@ -43,7 +43,7 @@ public class Solitary implements Feature {
                 player.sendMessage( "You were released from solitary.");
             }
 
-            if (!player.getGameMode().equals(GameMode.SPECTATOR)) {
+            if (!player.getGameMode().equals(GameMode.SPECTATOR) && PrisonGame.warden != null) {
                 if (player != PrisonGame.warden) {
                     Role role = PrisonGame.roles.get(player);
                     String acbar = "";
