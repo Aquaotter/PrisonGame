@@ -57,7 +57,7 @@ public class Schedule implements Feature {
         if (time > 7000 && time < 10000)
             setJobTime();
 
-        if (time > 1000 && time < 13000)
+        if (time > 10000 && time < 13000)
             setLunch();
 
         if (time > 13000 && time < 15000)
