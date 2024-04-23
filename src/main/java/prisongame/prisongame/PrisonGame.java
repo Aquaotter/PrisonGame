@@ -39,6 +39,7 @@ import prisongame.prisongame.config.ConfigKt;
 import prisongame.prisongame.config.FallbackConfigKt;
 import prisongame.prisongame.config.Prison;
 import prisongame.prisongame.discord.DiscordKt;
+import prisongame.prisongame.features.Feature;
 import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.keys.Keys;
@@ -374,8 +375,16 @@ public final class PrisonGame extends JavaPlugin {
             }
         }
 
-        MyTask task = new MyTask();
-        task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
+        var features = PackagesKt.getClassesInPackage(PrisonGame.class, "prisongame.prisongame.features", Feature.class::isAssignableFrom);
+
+        for (var clazz : features) {
+            try {
+                var feature = (Feature) clazz.getConstructor().newInstance();
+                feature.schedule();
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void registerEvents() {
