@@ -1,17 +1,13 @@
 package prisongame.prisongame.listeners;
 
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.discord.listeners.Messages;
 import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;

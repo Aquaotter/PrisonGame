@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedLeaveEvent;
-import prisongame.prisongame.MyTask;
 import prisongame.prisongame.features.Schedule;
 
 public class PlayerBedLeaveListener implements Listener {

@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import prisongame.prisongame.MyTask;
 import prisongame.prisongame.features.Schedule;
 
 public class SkipCommand implements CommandExecutor {
