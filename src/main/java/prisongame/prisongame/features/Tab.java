@@ -37,30 +37,48 @@ public class Tab implements Feature {
                 Placeholder.component("time", timer)
         );
 
+        var realGuardCount = 0;
         var guardCount = 0;
+
+        var realPrisonerCount = 0;
         var prisonerCount = 0;
+
+        var realPlayerCount = 0;
         var playerCount = 0;
+
         for(var player : Bukkit.getOnlinePlayers()){
             if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
                 playerCount++;
             }
+
+            realPlayerCount++;
         }
 
+        var realGuards = Component.empty();
         var guards = Component.empty();
+
+        var realPrisoners = Component.empty();
         var prisoners = Component.empty();
 
         for (var player : Bukkit.getOnlinePlayers()) {
             var role = PrisonGame.roles.get(player);
+            var displayName = player.displayName()
+                    .append(Component.space())
+                    .append(PrisonGame.getPingDisplay(player))
+                    .append(Component.newline());
+            var vanished = PrisonGame.mm.deserialize("<red>[VANISHED] ");
+
             switch (role) {
                 case NURSE, GUARD, SWAT -> {
                     if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
-                        guards = guards.append(player
-                                .displayName()
-                                .append(Component.space())
-                                .append(PrisonGame.getPingDisplay(player))
-                                .append(Component.newline()));
+                        guards = guards.append(displayName);
                         guardCount++;
                     }
+
+                    realGuardCount++;
+                    realGuards = realGuards
+                            .append(vanished)
+                            .append(displayName);
                 }
                 case PRISONER -> {
                     if (player.isDead() || player.hasPotionEffect(PotionEffectType.LUCK)) {
@@ -79,9 +97,44 @@ public class Tab implements Feature {
                                 .append(Component.newline()));
                         prisonerCount++;
                     }
+
+                    realPrisonerCount++;
+                    realPrisoners = realPrisoners
+                            .append(vanished)
+                            .append(displayName);
                 }
             }
         }
+
+        // todo: find a better way to do this
+        var staffTab = PrisonGame.mm.deserialize("""
+                <gray>---
+                <dark_red>YOU'RE IN STAFF TAB</dark_red>
+                
+                <yellow>PrisonButBad</yellow> - <white>made by agmass, 4950, Goose, and _Aquaotter_!</white>
+                <green>Players: <player-count></green>
+                <red><warden></red>
+                ---
+                
+                <aqua>Guards (<guard-count>):</aqua>
+                
+                <guards>
+                
+                ---
+                
+                <gold>Prisoners (<prisoner-count>):</gold>
+                
+                <prisoners>
+                <padding>
+                """,
+                Placeholder.component("player-count", PrisonGame.mm.deserialize("" + realPlayerCount)),
+                Placeholder.component("warden", wardenDisplay),
+                Placeholder.component("guard-count", PrisonGame.mm.deserialize("" + realGuardCount)),
+                Placeholder.component("guards", realGuards),
+                Placeholder.component("prisoner-count", PrisonGame.mm.deserialize("" + realPrisonerCount)),
+                Placeholder.component("prisoners", realPrisoners),
+                Placeholder.component("padding", PrisonGame.mm.deserialize("\n".repeat(50)))
+        );
 
         var tab = PrisonGame.mm.deserialize("""
                 <gray>---
@@ -112,9 +165,11 @@ public class Tab implements Feature {
 
         for (var player : Bukkit.getOnlinePlayers())
             if (!Keys.OLD_TAB.has(player)) {
-                player.sendPlayerListHeader(tab);
+                if (player.hasPermission("pbb.staff"))
+                    player.sendPlayerListHeader(staffTab);
+                else player.sendPlayerListHeader(tab);
             } else {
-                player.sendPlayerListHeaderAndFooter(Component.empty(), PrisonGame.mm.deserialize("Imagine using old tab. Actual pussy move ngl"));
+                player.sendPlayerListHeaderAndFooter(Component.empty(), PrisonGame.mm.deserialize("<gray>Why are you using old tab :("));
             }
     }
 }

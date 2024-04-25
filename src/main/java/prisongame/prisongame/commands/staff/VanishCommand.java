@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.discord.listeners.Messages;
 
 public class VanishCommand implements CommandExecutor {
     public static NamespacedKey VANISHED = new NamespacedKey(PrisonGame.instance, "vanished");
@@ -29,6 +30,8 @@ public class VanishCommand implements CommandExecutor {
                 loopedPlayer.showPlayer(PrisonGame.instance, player);
 
             sender.sendMessage(PrisonGame.mm.deserialize("<gray>You are revealed."));
+            Bukkit.broadcastMessage(ChatColor.GOLD+player.getName()+" was caught and sent to prison! (JOIN)");
+            Messages.INSTANCE.onJoin(player);
             return true;
         }
 
@@ -37,6 +40,8 @@ public class VanishCommand implements CommandExecutor {
             loopedPlayer.hidePlayer(PrisonGame.instance, player);
 
         sender.sendMessage(PrisonGame.mm.deserialize("<gray>You are hidden."));
+        Bukkit.broadcastMessage(ChatColor.GOLD+player.getName()+" ran of somewhere else (QUIT)");
+        Messages.INSTANCE.onLeave(player);
         return true;
     }
 }

@@ -1,5 +1,7 @@
 package prisongame.prisongame.features;
 
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -36,7 +38,7 @@ public class Cloak implements Feature {
                                     if (i.getItemMeta().getDisplayName().contains("[CONTRABAND]") || i.getType().equals(Material.STONE_SWORD) || i.getType().equals(Material.IRON_SWORD) || i.getType().equals(Material.IRON_HELMET) || i.getType().equals(Material.IRON_CHESTPLATE) || i.getType().equals(Material.IRON_LEGGINGS) || i.getType().equals(Material.IRON_BOOTS)) {
                                         if (!player.isInsideVehicle() && player.isOnline()) {
                                             player.addPotionEffect(PotionEffectType.GLOWING.createEffect(1200, 0));
-                                            player.sendMessage(ChatColor.RED + "You were caught with contraband!");
+                                            player.sendMessage(PrisonGame.mm.deserialize("<red>You were caught with contraband!"));
                                             if (PrisonGame.prisonerlevel.getOrDefault(player, 0) == 1) {
                                                 player.addPotionEffect(PotionEffectType.CONFUSION.createEffect(20 * 6, 0));
                                                 player.addPotionEffect(PotionEffectType.SLOW.createEffect(20 * 6, 0));
@@ -45,7 +47,10 @@ public class Cloak implements Feature {
                                             for (Player g : Bukkit.getOnlinePlayers()) {
                                                 if (PrisonGame.roles.get(g) != Role.PRISONER) {
                                                     g.playSound(g, Sound.ENTITY_SILVERFISH_DEATH, 1, 0.5f);
-                                                    g.sendMessage(ChatColor.RED + player.getName() + ChatColor.DARK_RED + " was caught with contraband!");
+                                                    g.sendMessage(PrisonGame.mm.deserialize(
+                                                        "<dark_red><player> was caught with contraband!",
+                                                        Placeholder.component("player", player.name().color(NamedTextColor.RED))
+                                                    ));
                                                 }
                                             }
                                             break;

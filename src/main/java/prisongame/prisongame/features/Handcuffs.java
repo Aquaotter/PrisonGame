@@ -18,6 +18,13 @@ public class Handcuffs implements Feature {
     @Override
     public void execute() {
         for (var player : Bukkit.getOnlinePlayers()) {
+            for (var entity : player.getPassengers())
+                if (entity instanceof Player passenger && !passenger.hasPotionEffect(PotionEffectType.WEAKNESS) && !passenger.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
+                    player.removePassenger(passenger);
+                    player.sendMessage(PrisonGame.mm.deserialize("<red>The handcuffs rotted away..."));
+                    passenger.sendMessage(PrisonGame.mm.deserialize("<green>The handcuffs rotted away! <gray>(you're free)"));
+                }
+
             if (player.getInventory().getItemInMainHand().hasItemMeta()) {
                 if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]")) {
                     if (PrisonGame.roles.get(player) == Role.PRISONER) {

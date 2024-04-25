@@ -21,9 +21,9 @@ public class AcceptCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         switch (PrisonGame.askType.getOrDefault((Player) sender, 0)) {
-            case 2 -> PrisonGame.setNurse((Player) sender);
-            case 1 -> PrisonGame.setGuard((Player) sender);
-            case 3 -> PrisonGame.setSwat((Player) sender);
+            case 2 -> PrisonGame.setNurse((Player) sender, false);
+            case 1 -> PrisonGame.setGuard((Player) sender, false);
+            case 3 -> PrisonGame.setSwat((Player) sender, false);
             case -1 -> {
                 MyListener.playerJoin(PrisonGame.warden, false);
                 PrisonGame.warden = null;

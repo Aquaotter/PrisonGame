@@ -104,15 +104,13 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         //
         if(Keys.PICKAXE_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 3);
-        if(Keys.SWORD_UPGRADE.get(event.getPlayer(), 0) >= 2) Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 2);
+        if(Keys.SWORD_UPGRADE.get(event.getPlayer(), 0) >= 2) Keys.SWORD_UPGRADE.set(event.getPlayer(), 2);
         if(Keys.PLUMBER_UPGRADE.get(event.getPlayer(), 0) >= 3) Keys.PLUMBER_UPGRADE.set(event.getPlayer(), 3);
         if(Keys.SHOVELING_UPGRADE.get(event.getPlayer(), 0) >= 2) Keys.SHOVELING_UPGRADE.set(event.getPlayer(), 2);
         //
         if(event.getPlayer().isInvulnerable()) event.getPlayer().setInvulnerable(false);
         if (!getConfig().getDev() && !event.getPlayer().getPersistentDataContainer().has(VanishCommand.VANISHED))
             Messages.INSTANCE.onJoin(event.getPlayer());
-        if(Keys.PICKAXE_UPGRADE.get(event.getPlayer()) == null)Keys.PICKAXE_UPGRADE.set(event.getPlayer(), 0);
-        if(Keys.SWORD_UPGRADE.get(event.getPlayer()) == null)Keys.SWORD_UPGRADE.set(event.getPlayer(), 0);
         if (PrisonGame.wardenenabled) {
             Player p = event.getPlayer();
             PrisonGame.trustlevel.put(event.getPlayer(), 0);
@@ -145,14 +143,14 @@ public class PlayerJoinListener implements Listener {
                 event.setJoinMessage(ChatColor.RED + event.getPlayer().getName() + " was caught and sent back to solitary! (JOIN)");
             }
         }else{
-            event.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', "&4&lThe server is currently &a&lReloading &c&lOr &4Completely fucked up. &c&lIf this error is occuring constanly please alert me @ &bhttps://discord.gg/GrcHKkFQsv"));
+            event.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('&', "&4&lThe server is currently &a&lReloading &c&lOr &4Completely messed up. &c&lIf this error is occurring constantly please alert me @aquaotter &bhttps://discord.gg/GrcHKkFQsv"));
         }
         Player pe = (Player) event.getPlayer();
-        if (PrisonGame.warden != null && PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
+        if (PrisonGame.warden != null && PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId()) && !pe.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
             switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
-                case 2 -> PrisonGame.setNurse((Player) pe);
-                case 1 -> PrisonGame.setGuard((Player) pe);
-                case 3 -> PrisonGame.setSwat((Player) pe);
+                case 2 -> PrisonGame.setNurse((Player) pe, true);
+                case 1 -> PrisonGame.setGuard((Player) pe, true);
+                case 3 -> PrisonGame.setSwat((Player) pe, true);
                 default -> ((Player) pe).sendMessage("An error has occured.");
             }
         }

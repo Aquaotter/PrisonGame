@@ -272,6 +272,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("forcemap").setExecutor(new ForceMapCommand());
         this.getCommand("playtime").setExecutor(new PlayTimeCommand());
         this.getCommand("joindate").setExecutor(new JoinDateCommand());
+        //this.getCommand("leaderboard").setExecutor(new LeaderboardCommand());
 
         this.getCommand("gangs").setTabCompleter(new GangsCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
@@ -283,6 +284,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("enderchest").setTabCompleter(new EnderChestCompleter());
         this.getCommand("inv").setTabCompleter(new InvcommandCompleter());
         this.getCommand("forcemap").setTabCompleter(new ForceMapCompleter());
+        //this.getCommand("leaderboard").setTabCompleter(new LeaderboardCompleter());
         Bukkit.broadcastMessage("RELOAD: Loaded Commands");
     }
 
@@ -432,11 +434,14 @@ public final class PrisonGame extends JavaPlugin {
     public static Location nl(String world, Double X, Double Y, Double Z, Float yaw, Float pitch) {
         return new Location(Bukkit.getWorld(world), X, Y, Z, yaw, pitch);
     }
-    public static void setNurse(Player g) {
+    public static void setNurse(Player g, Boolean silent) {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.roles.put(g, Role.NURSE);
-        Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + g.getName() + " was promoted to a nurse!");
-
+        if(silent) {
+            g.sendMessage(ChatColor.LIGHT_PURPLE+"You have been promoted to nurse Silently!");
+        }else{
+            Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + g.getName() + " was promoted to a nurse!");
+        }
         g.setCustomName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.LIGHT_PURPLE + "NURSE" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
@@ -524,10 +529,14 @@ public final class PrisonGame extends JavaPlugin {
 
         grantMaximumSecurityIfEligible();
     }
-    public static void setSwat(Player g) {
+    public static void setSwat(Player g, Boolean silent) {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.roles.put(g, Role.SWAT);
-        Bukkit.broadcastMessage(ChatColor.DARK_GRAY + g.getName() + " was promoted to a SWAT member!");
+        if(silent) {
+            Bukkit.broadcastMessage(ChatColor.DARK_GRAY +"You have been promoted to a SWAT member Silently!");
+        }else {
+            Bukkit.broadcastMessage(ChatColor.DARK_GRAY + g.getName() + " was promoted to a SWAT member!");
+        }
 
         g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.DARK_GRAY + "SWAT" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
@@ -605,10 +614,14 @@ public final class PrisonGame extends JavaPlugin {
         grantMaximumSecurityIfEligible();
     }
 
-    public static void setGuard(Player g) {
+    public static void setGuard(Player g, Boolean silent) {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.roles.put(g, Role.GUARD);
-        Bukkit.broadcastMessage(ChatColor.BLUE + g.getName() + " was promoted to a guard!");
+        if(silent) {
+            g.sendMessage(ChatColor.BLUE + "You was promoted to a guard silently!");
+        }else {
+            Bukkit.broadcastMessage(ChatColor.BLUE + g.getName() + " was promoted to a guard!");
+        }
 
         g.setCustomName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
         g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.BLUE + "GUARD" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
