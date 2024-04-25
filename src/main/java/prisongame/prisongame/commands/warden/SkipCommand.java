@@ -7,14 +7,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import prisongame.prisongame.MyTask;
+import prisongame.prisongame.features.Schedule;
 
 public class SkipCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         var player = (Player) commandSender;
 
-        if (!MyTask.bossbar.getTitle().contains("ROLL CALL")) {
+        if (!Schedule.bossBar.getTitle().contains("ROLL CALL")) {
             player.sendMessage(ChatColor.RED + "It is not roll call.");
             return true;
         }
