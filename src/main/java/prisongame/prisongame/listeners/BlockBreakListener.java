@@ -1,17 +1,14 @@
 package prisongame.prisongame.listeners;
 
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
-import prisongame.prisongame.discord.listeners.Messages;
+import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -57,9 +54,9 @@ public class BlockBreakListener implements Listener {
                 event.getBlock().setType(Material.DEEPSLATE);
                 event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                 if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
-                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 37.5 * MyTask.jobm);
+                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 37.5 * Schedule.jobMultiplier);
                 }else{
-                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 30 * MyTask.jobm);
+                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 30 * Schedule.jobMultiplier);
                 }
                 event.getPlayer().setCooldown(Material.IRON_PICKAXE, 5);
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {

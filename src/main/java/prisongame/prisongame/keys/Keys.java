@@ -36,7 +36,13 @@ public interface Keys {
     Key<Integer> SWORD_UPGRADE = new Key<>("SWORD_UPGRADE", new NamespacedKey(PrisonGame.instance, "swordupgrade"), KeyTypes.INTEGER);
     Key<Integer> SHOVELING_UPGRADE = new Key<>("SHOVELING_UPGRADE", new NamespacedKey(PrisonGame.instance, "shovelingupgrade"), KeyTypes.INTEGER);
     Key<Integer> PLUMBER_UPGRADE = new Key<>("PLUMBER_UPGRADE", new NamespacedKey(PrisonGame.instance, "plumberupgrade"), KeyTypes.INTEGER);
-
+    Key<Integer> SHOVELING_COUNT = new Key<>("SHOVELING_UPGRADE", new NamespacedKey(PrisonGame.instance, "shovelingcount"), KeyTypes.INTEGER);
+    Key<Integer> ALLWARDENTIME = new Key<>("ALLWARDENTIME", new NamespacedKey(PrisonGame.instance, "allwardentime"), KeyTypes.INTEGER);
+    Key<Integer> PICKAXE_COUNT = new Key<>("PICKAXE_COUNT", new NamespacedKey(PrisonGame.instance, "pickaxecount"), KeyTypes.INTEGER);
+    Key<Integer> SWORDMAN_COUNT = new Key<>("SWORDMAN_COUNT", new NamespacedKey(PrisonGame.instance, "swordmancount"), KeyTypes.INTEGER);
+    Key<Integer> FOARGING_COUNT = new Key<>("FOARGING_COUNT", new NamespacedKey(PrisonGame.instance, "foargingcount"), KeyTypes.INTEGER);
+    Key<Integer> PLUMBER_COUNT = new Key<>("PLUMBER_COUNT", new NamespacedKey(PrisonGame.instance, "plumbercount"), KeyTypes.INTEGER);
+    Key<Integer> COOKEDFISH_COUNT = new Key<>("COOKEDFISH_COUNT", new NamespacedKey(PrisonGame.instance, "cookedfishcount"), KeyTypes.INTEGER);
     static @Nullable Key<?> valueOf(String name) {
         try {
             var field = Keys.class.getDeclaredField(name);

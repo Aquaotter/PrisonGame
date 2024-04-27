@@ -18,9 +18,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffectType;
-import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.config.Prison;
+import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -163,10 +163,10 @@ public class PlayerInteractListener implements Listener {
                             if(shovelingLvl == 0) shovelingLvl=0;
                             if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
                                 paidedamount=(escapeamount*increasearg)+escapeamount;
-                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + paidedamount * MyTask.jobm);
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + paidedamount * Schedule.jobMultiplier);
                             }else {
                                 paidedamount=(normalamount*increasearg)+normalamount;
-                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + paidedamount * MyTask.jobm);
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + paidedamount * Schedule.jobMultiplier);
                             }
                             Random rand = new Random();
                             float chance = 0.3f;
@@ -207,9 +207,9 @@ public class PlayerInteractListener implements Listener {
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                                 event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
                                 if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
-                                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.5 * MyTask.jobm);
+                                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.5 * Schedule.jobMultiplier);
                                 }else {
-                                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
+                                    Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * Schedule.jobMultiplier);
                                 }
                             }, 20 * 4);
                         }
@@ -268,7 +268,7 @@ public class PlayerInteractListener implements Listener {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+ event.getPlayer().getName()+" potion{custom_potion_effects:[{id:strength,duration:400,amplifier:0},{id:speed,duration:200,amplifier:2},{id:nausea,duration:140,amplifier:1},{id:poison,duration:100,amplifier:3}],display:{Name:'[\"\",{\"text\":\"Not Meth\",\"italic\":false,\"color\":\"yellow\"}]'}}");
                     }
                 }
-                if (MyTask.bossbar.getTitle().equals("Breakfast") || MyTask.bossbar.getTitle().equals("Lunch")) {
+                if (Schedule.bossBar.getTitle().equals("Breakfast") || Schedule.bossBar.getTitle().equals("Lunch")) {
                     if (sign.getLine(1).equals("Get Cafe")) {
                         if (PrisonGame.gotcafefood.getOrDefault(event.getPlayer(), false)) {
                             PrisonGame.gotcafefood.put(event.getPlayer(), true);
@@ -485,7 +485,7 @@ public class PlayerInteractListener implements Listener {
             if (event.getClickedBlock().getType().equals(Material.SPRUCE_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
                 if (sign.getLine(1).equals("TP To Prison")) {
-                    if (!MyTask.bossbar.getTitle().equals("LIGHTS OUT")) {
+                    if (!Schedule.bossBar.getTitle().equals("LIGHTS OUT")) {
                         event.getPlayer().setCooldown(Material.IRON_DOOR, 20);
                         event.getPlayer().teleport(PrisonGame.active.getPrisoner().getLocation());
                     }
@@ -984,9 +984,9 @@ public class PlayerInteractListener implements Listener {
                     if (!event.getPlayer().hasCooldown(Material.CARROT_ON_A_STICK)) {
                         event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 0.75f, 1.75f);
                         if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
-                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.625 * MyTask.jobm);
+                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.625 * Schedule.jobMultiplier);
                         }else {
-                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.5 * MyTask.jobm);
+                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 0.5 * Schedule.jobMultiplier);
                         }
                         Random rand = new Random();
                         float chance = 0.2f;
@@ -1011,9 +1011,9 @@ public class PlayerInteractListener implements Listener {
                             event.getPlayer().setCooldown(Material.WOODEN_AXE, 10);
                             event.getPlayer().playSound(event.getPlayer(), Sound.BLOCK_WOOD_BREAK, 1, 1);
                             if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
-                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.5 * MyTask.jobm);
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.5 * Schedule.jobMultiplier);
                             }else {
-                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * MyTask.jobm);
+                                Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + 2.0 * Schedule.jobMultiplier);
                             }
                             Random rand = new Random();
                             float chance = 0.75f;

@@ -40,6 +40,8 @@ import prisongame.prisongame.config.ConfigKt;
 import prisongame.prisongame.config.FallbackConfigKt;
 import prisongame.prisongame.config.Prison;
 import prisongame.prisongame.discord.DiscordKt;
+import prisongame.prisongame.features.Feature;
+import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.gangs.GangRole;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
@@ -59,9 +61,9 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Boolean> escaped = new HashMap<>();
     public static HashMap<Player, Role> roles = new HashMap<>();
     public static HashMap<Player, Integer> askType = new HashMap<>();
-    static HashMap<Player, Integer> lastward = new HashMap<>();
-    static HashMap<Player, Integer> lastward2 = new HashMap<>();
-    static HashMap<Player, Integer> wardenban = new HashMap<>();
+    public static HashMap<Player, Integer> lastward = new HashMap<>();
+    public static HashMap<Player, Integer> lastward2 = new HashMap<>();
+    public static HashMap<Player, Integer> wardenban = new HashMap<>();
     public static HashMap<Player, String> word = new HashMap<>();
     static HashMap<Player, Integer> saidcycle = new HashMap<>();
     public static Integer BBpower = 100;
@@ -271,7 +273,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("forcemap").setExecutor(new ForceMapCommand());
         this.getCommand("playtime").setExecutor(new PlayTimeCommand());
         this.getCommand("joindate").setExecutor(new JoinDateCommand());
-        //this.getCommand("leaderboard").setExecutor(new LeaderboardCommand());
+        this.getCommand("leaderboard").setExecutor(new LeaderboardCommand());
 
         this.getCommand("gangs").setTabCompleter(new GangsCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
@@ -283,7 +285,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("enderchest").setTabCompleter(new EnderChestCompleter());
         this.getCommand("inv").setTabCompleter(new InvcommandCompleter());
         this.getCommand("forcemap").setTabCompleter(new ForceMapCompleter());
-        //this.getCommand("leaderboard").setTabCompleter(new LeaderboardCompleter());
+        this.getCommand("leaderboard").setTabCompleter(new LeaderboardCompleter());
         Bukkit.broadcastMessage("RELOAD: Loaded Commands");
     }
 
@@ -376,8 +378,16 @@ public final class PrisonGame extends JavaPlugin {
             }
         }
 
-        MyTask task = new MyTask();
-        task.runTaskTimer(getPlugin(this.getClass()), 0, 1);
+        var features = PackagesKt.getClassesInPackage(PrisonGame.class, "prisongame.prisongame.features", Feature.class::isAssignableFrom);
+
+        for (var clazz : features) {
+            try {
+                var feature = (Feature) clazz.getConstructor().newInstance();
+                feature.schedule();
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void registerEvents() {
@@ -418,7 +428,7 @@ public final class PrisonGame extends JavaPlugin {
         new Data(PrisonGame.savedPlayerGuards).saveData("saveguard.data");
         SQL.close();
         bertrude.remove();
-        MyTask.bossbar.removeAll();
+        Schedule.bossBar.removeAll();
         DiscordKt.close();
     }
 

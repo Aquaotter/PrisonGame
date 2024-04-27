@@ -120,5 +120,5 @@ commands:
     permission: pbb.playtime
     usage: /playtime <player>
     description: Gives the playtime of provided player!
-  #leaderboard:
-    #description: Opens a Leaderboard of whatever is provided
+  leaderboard:
+    description: Opens a Leaderboard of whatever is provided

@@ -3,7 +3,6 @@ package prisongame.prisongame.listeners;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,8 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffectType;
-import prisongame.prisongame.MyTask;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.lib.Role;
 
 public class EntityDamageByEntityListener implements Listener {
@@ -80,7 +79,7 @@ public class EntityDamageByEntityListener implements Listener {
                 event.setCancelled(true);
             }
         }
-        if (MyTask.bossbar.getTitle().contains("ROLL CALL")) {
+        if (Schedule.bossBar.getTitle().contains("ROLL CALL")) {
             if (event.getEntity() instanceof Player) {
                 Player p = (Player) event.getEntity();
                 if (new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND)) {

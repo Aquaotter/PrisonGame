@@ -3,6 +3,7 @@ package prisongame.prisongame.discord
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.Permission
+import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Role
@@ -32,6 +33,7 @@ fun setup() {
         .enableIntents(GatewayIntent.GUILD_MESSAGES)
         .enableIntents(GatewayIntent.MESSAGE_CONTENT)
         .addEventListeners(Messages, Commands)
+        .setActivity(Activity.playing("Playing PrisonButBad.Minehut.GG"))
         .build();
 
     jda.awaitReady()
