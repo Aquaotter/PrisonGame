@@ -66,7 +66,7 @@ public class Tab implements Feature {
                     .append(Component.space())
                     .append(PrisonGame.getPingDisplay(player))
                     .append(Component.newline());
-            var vanished = PrisonGame.mm.deserialize("<red>[VANISHED] ");
+            var vanished = PrisonGame.mm.deserialize("<gray>[<red>VANISHED<gray>] ");
 
             switch (role) {
                 case NURSE, GUARD, SWAT -> {

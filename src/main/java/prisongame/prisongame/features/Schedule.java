@@ -1,6 +1,5 @@
 package prisongame.prisongame.features;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.title.Title;
@@ -15,7 +14,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
-import prisongame.prisongame.MyListener;
+import oshi.jna.platform.mac.SystemB;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Role;
 
@@ -68,6 +67,7 @@ public class Schedule implements Feature {
 
         if (time > 15000 && time < 16000)
             setCellTime();
+        if(time == 24000) endLightsOut();
 
         if (time > 16000 && time < 24000)
             setLightsOut();
@@ -125,10 +125,13 @@ public class Schedule implements Feature {
         for (var player : Bukkit.getOnlinePlayers()) {
             var role = PrisonGame.roles.get(player);
 
-            if (PrisonGame.escaped.get(player) || !player.hasPotionEffect(PotionEffectType.GLOWING) || role != Role.PRISONER)
+            if (PrisonGame.escaped.get(player) || !player.hasPotionEffect(PotionEffectType.GLOWING) || role != Role.PRISONER || PrisonGame.builder.get(player)) {
+                PrisonGame.saidcycle.put(player, PrisonGame.saidcycle.get(player) + 1);
                 continue;
+            }
 
             if (player.hasPotionEffect(PotionEffectType.GLOWING) && role == Role.PRISONER) {
+                PrisonGame.saidcycle.put(player, PrisonGame.saidcycle.get(player) - 1);
                 Bukkit.broadcast(PrisonGame.mm.deserialize(
                         "<gold><player> didn't come to roll call! <red>Kill them for 100 dollars!",
                         Placeholder.component("player", player.name().color(NamedTextColor.RED))
@@ -255,5 +258,14 @@ public class Schedule implements Feature {
         bossBar.setColor(BarColor.RED);
         bossBar.addFlag(BarFlag.DARKEN_SKY);
         bossBar.addFlag(BarFlag.CREATE_FOG);
+    }
+    private void endLightsOut(){
+        for(Player p : Bukkit.getOnlinePlayers()){
+            if(p.isSleeping()) {
+                PrisonGame.saidcycle.put(p, PrisonGame.saidcycle.get(p) + 1);
+            }else{
+                PrisonGame.saidcycle.put(p, PrisonGame.saidcycle.get(p) - 1);
+            }
+        }
     }
 }

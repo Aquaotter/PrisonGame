@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.discord.listeners.Messages;
 
 import java.time.Instant;
 
@@ -83,6 +84,7 @@ public class IntercomCommand implements CommandExecutor {
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage("");
+        Messages.INSTANCE.onIntercom(b.toString());
         return true;
     }
 }

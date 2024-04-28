@@ -148,10 +148,10 @@ public class PlayerJoinListener implements Listener {
         Player pe = (Player) event.getPlayer();
         if (PrisonGame.warden != null && PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId()) && !pe.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
             switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
-                case 2 -> PrisonGame.setNurse((Player) pe, true);
-                case 1 -> PrisonGame.setGuard((Player) pe, true);
-                case 3 -> PrisonGame.setSwat((Player) pe, true);
-                default -> ((Player) pe).sendMessage("An error has occured.");
+                case 2 -> PrisonGame.setNurse((Player) pe, false);
+                case 1 -> PrisonGame.setGuard((Player) pe, false);
+                case 3 -> PrisonGame.setSwat((Player) pe, false);
+                default -> ((Player) pe).sendMessage("An error has occurred.");
             }
         }
         if (event.getPlayer().getPersistentDataContainer().has(VanishCommand.VANISHED)) {

@@ -64,6 +64,16 @@ object Messages : ListenerAdapter() {
                 .replace("_", "\\_")
         )).queue();
     }
+    fun onIntercom(message: String) {
+        chatChannel.sendMessage(String.format(
+            "**%s**: %s",
+            PlainTextComponentSerializer.plainText()
+                .serialize(Component.text("INTERCOM >> ")),
+            message
+                .replace("@", "`@`")
+                .replace("_", "\\_")
+        )).queue();
+    }
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val content = event.message.contentDisplay

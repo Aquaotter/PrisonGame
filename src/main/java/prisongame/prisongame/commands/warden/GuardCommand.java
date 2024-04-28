@@ -18,7 +18,7 @@ public class GuardCommand implements CommandExecutor {
                 Player g = Bukkit.getPlayer(args[0]);
                 if (g.isOnline() && g != sender && PrisonGame.roles.get(g) == Role.PRISONER) {
                     PrisonGame.askType.put(g, 1);
-                    sender.sendMessage(ChatColor.AQUA + "Succesfully asked player to be a guard!");
+                    sender.sendMessage(ChatColor.AQUA + "Successfully asked player to be a guard!");
                     g.sendMessage(ChatColor.BLUE + "The wardens wants you to be a guard! use '/accept'");
                 } else {
                     sender.sendMessage(ChatColor.BLUE + "We had troubles promoting this player.");

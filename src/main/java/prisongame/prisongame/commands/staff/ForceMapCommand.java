@@ -19,11 +19,12 @@ public class ForceMapCommand implements CommandExecutor {
         String map = "NULL";
         for (var prison : getConfig().getPrisons().values()) {
             if(name.equals(prison.getName())) {
-                switchMap(prison);
                 map = prison.getDisplayName();
+                Bukkit.broadcastMessage(ChatColor.RED+"\nMAP FORCE TO "+ChatColor.RESET+map+ChatColor.RED+ " !\n");
+                switchMap(prison);
+                return true;
             }
         }
-        Bukkit.broadcastMessage(ChatColor.RED+"\nMAP FORCE TO "+ChatColor.RESET+map+ChatColor.RED+ " !\n");
         return true;
     }
 }

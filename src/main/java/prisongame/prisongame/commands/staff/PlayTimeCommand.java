@@ -2,6 +2,7 @@ package prisongame.prisongame.commands.staff;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,13 +20,9 @@ public class PlayTimeCommand implements CommandExecutor {
             commandSender.sendMessage(ChatColor.RED+"You need to provide a player!");
             return true;
         }
-        Player p = Bukkit.getPlayer(strings[0]);
+        OfflinePlayer p = Bukkit.getOfflinePlayer(strings[0]);
         if(p == null) {
             commandSender.sendMessage(ChatColor.RED+"Sorry, I cannot find that player!");
-            return true;
-        }
-        if(p.hasPermission("pbb.playtime.bypasscheck")){
-            commandSender.sendMessage(ChatColor.GRAY+"Sorry, This players have perms to Bypass checking there playtime!");
             return true;
         }
         int timeinticks = p.getStatistic(Statistic.PLAY_ONE_MINUTE);

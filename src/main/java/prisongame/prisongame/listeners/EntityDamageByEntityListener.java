@@ -41,6 +41,10 @@ public class EntityDamageByEntityListener implements Listener {
                     p.setNoDamageTicks(0);
                 }
             }
+            if(a.hasPotionEffect(PotionEffectType.FAST_DIGGING) && !PrisonGame.roles.get((Player) event.getEntity()).equals(Role.PRISONER)){ // SPY
+                a.sendMessage(ChatColor.DARK_GRAY+"You can't hit Guards as Spy!! Shh");
+                event.setCancelled(true);
+            }
             if (PrisonGame.roles.get(a) == Role.PRISONER) {
                 if (a.getInventory().getItemInMainHand().getType().equals(Material.WOODEN_AXE)) {
                     a.sendMessage(ChatColor.GREEN + "You cannot use LumberJack's Axe to fight!");

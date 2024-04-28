@@ -65,7 +65,7 @@ public final class PrisonGame extends JavaPlugin {
     public static HashMap<Player, Integer> lastward2 = new HashMap<>();
     public static HashMap<Player, Integer> wardenban = new HashMap<>();
     public static HashMap<Player, String> word = new HashMap<>();
-    static HashMap<Player, Integer> saidcycle = new HashMap<>();
+    public static HashMap<Player, Integer> saidcycle = new HashMap<>();
     public static Integer BBpower = 100;
     public static HashMap<Player, String> prisonnumber = new HashMap<>();
     static HashMap<Player, Double> wealthcycle = new HashMap<>();
@@ -274,6 +274,7 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("playtime").setExecutor(new PlayTimeCommand());
         this.getCommand("joindate").setExecutor(new JoinDateCommand());
         this.getCommand("leaderboard").setExecutor(new LeaderboardCommand());
+        this.getCommand("staffchat").setExecutor(new StaffChatCommand());
 
         this.getCommand("gangs").setTabCompleter(new GangsCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
@@ -534,7 +535,7 @@ public final class PrisonGame extends JavaPlugin {
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.roles.put(g, Role.SWAT);
         if(silent) {
-            Bukkit.broadcastMessage(ChatColor.DARK_GRAY +"You have been promoted to a SWAT member Silently!");
+            g.sendMessage(ChatColor.DARK_GRAY +"You have been promoted to a SWAT member Silently!");
         }else {
             Bukkit.broadcastMessage(ChatColor.DARK_GRAY + g.getName() + " was promoted to a SWAT member!");
         }
@@ -770,9 +771,13 @@ public final class PrisonGame extends JavaPlugin {
 
         // Set the name of the item
         meta.setDisplayName(name);
+        List<String> coloredLore = new ArrayList<>();
+        for(String sublore : lore){
+            coloredLore.add(ChatColor.translateAlternateColorCodes('&', sublore));
+        }
 
         // Set the lore of the item
-        meta.setLore(Arrays.asList(lore));
+        meta.setLore(coloredLore);
 
         item.setItemMeta(meta);
 

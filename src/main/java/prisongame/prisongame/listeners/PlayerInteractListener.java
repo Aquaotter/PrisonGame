@@ -394,7 +394,7 @@ public class PlayerInteractListener implements Listener {
 //                            inv.addItem(PrisonGame.createGuiItem(Material.LAVA_BUCKET, ChatColor.RED + "Volcano"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.GRAY_CONCRETE, ChatColor.GRAY + "Skeld"));
 //                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, ChatColor.DARK_GRAY + "Maximum Security"));
-//                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, "§aRocksNGrass"));
+//                            inv.addItem(PrisonGame.createGuiItem(Material.DEEPSLATE_TILES, "&aRocksNGrass"));
 
                                 //inv.addItem(PrisonGame.createGuiItem(Material.QUARTZ, ChatColor.BLUE + "Boat"));
                                 //inv.addItem(PrisonGame.createGuiItem(Material.NETHERRACK, ChatColor.RED + "Nether"));
@@ -470,11 +470,11 @@ public class PlayerInteractListener implements Listener {
                 Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                     Inventory inv = Bukkit.createInventory(null, 9, "Crafting");
                     inv.addItem(PrisonGame.createGuiItem(Material.CRAFTING_TABLE, ChatColor.LIGHT_PURPLE + "Normal Crafting"));
-                    inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.LIGHT_PURPLE + "Rock", "§aRecipe:", "§b9 Pebbles"));
-                    inv.addItem(PrisonGame.createGuiItem(Material.PAPER, ChatColor.WHITE + "Paper", "§aRecipe:", "§b1 Coal", "§b1 Scrap Metal", "§a15$"));
-                    inv.addItem(PrisonGame.createGuiItem(Material.TRIPWIRE_HOOK, ChatColor.LIGHT_PURPLE + "Fake Card", "§aRecipe:", "§b3 Paper", "§b2 Sticks"));
-                    inv.addItem(PrisonGame.createGuiItem(Material.SHEARS, ChatColor.GRAY + "WireCutters", "§aRecipe:", "§b4 Scrap Metal", "§b2 Sticks", "§b1 Rock"));
-                    inv.addItem(PrisonGame.createGuiItem(Material.LEATHER_CHESTPLATE, ChatColor.DARK_GRAY + "Cloak", "§aRecipe:", "§b1 Coal", "§ba15$"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.COBBLESTONE, ChatColor.LIGHT_PURPLE + "Rock", "&aRecipe:", "&b9 Pebbles"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.PAPER, ChatColor.WHITE + "Paper", "&aRecipe:", "&b1 Coal", "&b1 Scrap Metal", "&a15$"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.TRIPWIRE_HOOK, ChatColor.LIGHT_PURPLE + "Fake Card", "&aRecipe:", "&b3 Paper", "&b2 Sticks"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.SHEARS, ChatColor.GRAY + "WireCutters", "&aRecipe:", "&b4 Scrap Metal", "&b2 Sticks", "&b1 Rock"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.LEATHER_CHESTPLATE, ChatColor.DARK_GRAY + "Cloak", "&aRecipe:", "&b1 Coal", "&ba15$"));
                     event.getPlayer().openInventory(inv);
                 }, 1L);
             }
@@ -750,6 +750,8 @@ public class PlayerInteractListener implements Listener {
                         ItemStack pot = new ItemStack(new ItemStack(Material.SPLASH_POTION));
                         PotionMeta potMeta = (PotionMeta) pot.getItemMeta();
                         potMeta.addCustomEffect(PotionEffectType.CONFUSION.createEffect(20 * 10, 0), true);
+                        potMeta.addCustomEffect(PotionEffectType.POISON.createEffect(20 * 5, 0), true);
+                        potMeta.addCustomEffect(PotionEffectType.BLINDNESS.createEffect(20 * 10, 0), true);
                         potMeta.setColor(Color.LIME);
                         pot.setItemMeta(potMeta);
 
@@ -1030,6 +1032,11 @@ public class PlayerInteractListener implements Listener {
                 event.setCancelled(true);
                 if (!event.getPlayer().hasCooldown(Material.IRON_DOOR)) {
                     if (PrisonGame.roles.get(event.getPlayer()) != Role.GUARD && PrisonGame.roles.get(event.getPlayer()) != Role.NURSE && PrisonGame.roles.get(event.getPlayer()) != Role.SWAT) {
+                        if(event.getPlayer().hasPotionEffect(PotionEffectType.FAST_DIGGING)){ // SPY
+                            event.getPlayer().sendMessage(ChatColor.DARK_GRAY+"You can't go in the BlackMarket as Spy! Shh");
+                            event.setCancelled(true);
+                            return;
+                        }
                         event.getPlayer().teleport(PrisonGame.active.getBlackMarketIn().getLocation());
                         event.getPlayer().sendTitle("", ChatColor.GRAY + "-= Black Market =-");
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:market");

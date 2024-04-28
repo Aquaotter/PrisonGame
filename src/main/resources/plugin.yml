@@ -122,3 +122,7 @@ commands:
     description: Gives the playtime of provided player!
   leaderboard:
     description: Opens a Leaderboard of whatever is provided
+  staffchat:
+    description: Send message to fellow staff members!
+    permission: pbb.staff
+    aliases: /sc
