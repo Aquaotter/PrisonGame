@@ -20,6 +20,7 @@ object Commands : ListenerAdapter() {
             "unban" -> unban(event)
             "unmute" -> unmute(event)
             "link" -> link(event)
+            "history" -> history(event)
             else -> {}
         }
     }
@@ -34,6 +35,7 @@ object Commands : ListenerAdapter() {
         val player = Bukkit.getOfflinePlayer(uuid) ?: return
 
         issueBan(player, "perm", "slurs")
+        Messages.onPunishment(player.name.toString(), "slurs", "BAN", event.member?.nickname.toString(),"perm")
         event.reply("Banned **${player.name}** for **slurs**.").queue()
     }
 

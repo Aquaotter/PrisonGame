@@ -14,14 +14,19 @@ import prisongame.prisongame.PrisonGame;
 public class PlayerToggleSneakListener implements Listener {
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+        if(event.getPlayer().hasPotionEffect(PotionEffectType.WEAKNESS) || event.getPlayer().hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
+            event.setCancelled(true);
+            return;
+        }
         for (Entity e : event.getPlayer().getPassengers()) {
             e.leaveVehicle();
             if (e instanceof Player) {
                 Player p = (Player) e;
+                p.showPlayer(PrisonGame.instance, event.getPlayer());
                 p.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
                 p.removePotionEffect(PotionEffectType.WEAKNESS);
                 p.removePotionEffect(PotionEffectType.BLINDNESS);
-                if (!event.getPlayer().isOnGround() || event.getPlayer().isSprinting()) {
+                if (!event.getPlayer().isOnGround() || event.getPlayer().isSprinting()) {;
                     event.getPlayer().sendMessage(ChatColor.GREEN + "You threw a player (You can throw players with handcuffs by sprint or jump)");
                     p.sendTitle("THROWN!", "");
                     Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {

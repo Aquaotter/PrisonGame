@@ -1,6 +1,7 @@
 package prisongame.prisongame.features;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import prisongame.prisongame.PrisonGame;
 
 public class Boat implements Feature {
@@ -11,13 +12,15 @@ public class Boat implements Feature {
 
     @Override
     public void execute() {
-        if (!PrisonGame.active.getName().equals("Boat"))
-            return;
-
-        for (var player : Bukkit.getOnlinePlayers())
-            if (player.getY() <= -53 && player.isInWater()) {
-                player.setNoDamageTicks(1);
-                player.damage(1);
+        if(PrisonGame.active.getName().equals("Boat")) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                if (p.getLocation().getBlockY() <= -53 && PrisonGame.active.getName().equals("Boat") && p.isInWater()) {
+                    p.damage(1);
+                    p.setNoDamageTicks(1);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:dewater");
+                }
             }
+
+        }
     }
 }

@@ -8,7 +8,7 @@
             "text": "Shovel 500 Coarse Dirt"
         },
         "icon": {
-            "item": "minecraft:gold_shovel"
+            "item": "minecraft:golden_shovel"
         },
         "frame": "task",
         "show_toast": true,

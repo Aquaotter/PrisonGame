@@ -3,12 +3,9 @@ package prisongame.prisongame.features;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.Bukkit;
-import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.keys.Keys;
-
-import java.text.DecimalFormat;
 
 public class Tab implements Feature {
     @Override
@@ -18,7 +15,7 @@ public class Tab implements Feature {
 
     @Override
     public void execute() {
-        var format = new DecimalFormat("#0.0");
+        //var format = new DecimalFormat("#0.0");
         var timer = PrisonGame.mm.deserialize(PrisonGame.warden == null
                 ? "(No Warden!)"
                 : PrisonGame.wardentime.get(PrisonGame.warden) / (20 * 60) + "m");
@@ -70,38 +67,30 @@ public class Tab implements Feature {
 
             switch (role) {
                 case NURSE, GUARD, SWAT -> {
-                    if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
-                        guards = guards.append(displayName);
+                    if (player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+                        realGuardCount++;
+                        realGuards = realGuards
+                                .append(vanished)
+                                .append(displayName);
+                    }else{
+                            realGuards = realGuards.append(displayName);
+                            guards = guards.append(displayName);
                         guardCount++;
+                        realGuardCount++;
                     }
-
-                    realGuardCount++;
-                    realGuards = realGuards
-                            .append(vanished)
-                            .append(displayName);
                 }
                 case PRISONER -> {
-                    if (player.isDead() || player.hasPotionEffect(PotionEffectType.LUCK)) {
-                        prisoners = prisoners.append(PrisonGame.mm.deserialize(
-                                "<dark_red>☠ <gray><player>\n",
-                                Placeholder.component("player", player.name())
-                        ));
+                    if (player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
+                        realPrisonerCount++;
+                        realPrisoners = realPrisoners
+                                .append(vanished)
+                                .append(displayName);
+                    }else{
+                            prisoners = prisoners.append(displayName);
+                            realPrisoners = realPrisoners.append(displayName);
                         prisonerCount++;
-                        break;
+                        realPrisonerCount++;
                     }
-                    if (!player.getPersistentDataContainer().has(VanishCommand.VANISHED)) {
-                        prisoners = prisoners.append(player
-                                .displayName()
-                                .append(Component.space())
-                                .append(PrisonGame.getPingDisplay(player))
-                                .append(Component.newline()));
-                        prisonerCount++;
-                    }
-
-                    realPrisonerCount++;
-                    realPrisoners = realPrisoners
-                            .append(vanished)
-                            .append(displayName);
                 }
             }
         }
@@ -109,6 +98,7 @@ public class Tab implements Feature {
         // todo: find a better way to do this
         var staffTab = PrisonGame.mm.deserialize("""
                 <gray>---
+                
                 <dark_red>YOU'RE IN STAFF TAB</dark_red>
                 
                 <yellow>PrisonButBad</yellow> - <white>made by agmass, 4950, Goose, and _Aquaotter_!</white>
@@ -133,7 +123,8 @@ public class Tab implements Feature {
                 Placeholder.component("guards", realGuards),
                 Placeholder.component("prisoner-count", PrisonGame.mm.deserialize("" + realPrisonerCount)),
                 Placeholder.component("prisoners", realPrisoners),
-                Placeholder.component("padding", PrisonGame.mm.deserialize("\n".repeat(50)))
+
+        Placeholder.component("padding", PrisonGame.mm.deserialize("\n".repeat(100))) // set to not be seen at GUI 1
         );
 
         var tab = PrisonGame.mm.deserialize("""

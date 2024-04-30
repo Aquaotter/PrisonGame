@@ -37,8 +37,8 @@ public class PassCommand implements CommandExecutor {
             }
 
             PrisonGame.askType.put(g, -1);
-            sender.sendMessage(ChatColor.AQUA + "Succesfully asked player to be the warden!");
-            g.sendMessage(ChatColor.RED + "The wardens wants you to be the warden! use '/accept'");
+            sender.sendMessage(ChatColor.AQUA + "Successfully asked player to be the warden!");
+            g.sendMessage(ChatColor.RED + "The warden wants you to be the warden! use '/accept'");
         }
         return true;
     }

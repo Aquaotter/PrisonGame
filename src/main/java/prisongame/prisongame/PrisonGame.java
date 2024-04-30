@@ -13,6 +13,7 @@ import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -43,6 +44,7 @@ import prisongame.prisongame.discord.DiscordKt;
 import prisongame.prisongame.features.Feature;
 import prisongame.prisongame.features.Schedule;
 import prisongame.prisongame.gangs.GangRole;
+import prisongame.prisongame.keys.Key;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 import prisongame.prisongame.lib.SQL;
@@ -196,6 +198,7 @@ public final class PrisonGame extends JavaPlugin {
     public void onEnable() {
         try {
             instance = this;
+            loadMotd();
             FallbackConfigKt.getFallbackConfig();
             ConfigKt.getConfig();
             setupDatabase();
@@ -273,8 +276,9 @@ public final class PrisonGame extends JavaPlugin {
         this.getCommand("forcemap").setExecutor(new ForceMapCommand());
         this.getCommand("playtime").setExecutor(new PlayTimeCommand());
         this.getCommand("joindate").setExecutor(new JoinDateCommand());
-        this.getCommand("leaderboard").setExecutor(new LeaderboardCommand());
+        this.getCommand("leaderboard").setExecutor(new LeaderboardCommand()); // ToDO Needs a refactoring...
         this.getCommand("staffchat").setExecutor(new StaffChatCommand());
+        this.getCommand("stats").setExecutor(new StatsCommand());
 
         this.getCommand("gangs").setTabCompleter(new GangsCompleter());
         this.getCommand("debug").setTabCompleter(new DebugCompleter());
@@ -437,6 +441,7 @@ public final class PrisonGame extends JavaPlugin {
         return new Location(Bukkit.getWorld(world), X, Y, Z, yaw, pitch);
     }
     public static void setNurse(Player g, Boolean silent) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:guard");
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.roles.put(g, Role.NURSE);
         if(silent) {
@@ -501,6 +506,7 @@ public final class PrisonGame extends JavaPlugin {
         ItemMeta cardm2 = card2.getItemMeta();
         cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
         card2.setItemMeta(cardm2);
         g.getInventory().addItem(card2);
 
@@ -532,6 +538,7 @@ public final class PrisonGame extends JavaPlugin {
         grantMaximumSecurityIfEligible();
     }
     public static void setSwat(Player g, Boolean silent) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:guard");
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.roles.put(g, Role.SWAT);
         if(silent) {
@@ -577,6 +584,7 @@ public final class PrisonGame extends JavaPlugin {
         ItemMeta cardm2 = card2.getItemMeta();
         cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
         card2.setItemMeta(cardm2);
         g.getInventory().addItem(card2);
 
@@ -617,6 +625,7 @@ public final class PrisonGame extends JavaPlugin {
     }
 
     public static void setGuard(Player g, Boolean silent) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + g.getName() + " only prison:guard");
         Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Guards").addPlayer(g);
         PrisonGame.roles.put(g, Role.GUARD);
         if(silent) {
@@ -671,6 +680,7 @@ public final class PrisonGame extends JavaPlugin {
         ItemMeta cardm2 = card2.getItemMeta();
         cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
         cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.addUnsafeEnchantment(Enchantment.DURABILITY, 5);
         card2.setItemMeta(cardm2);
         g.getInventory().addItem(card2);
 
@@ -783,5 +793,109 @@ public final class PrisonGame extends JavaPlugin {
 
         return item;
     }
+    private void loadMotd(){
+        Bukkit.setMotd(ChatColor.translateAlternateColorCodes('&', "                     &6PrisonButBad\n&fIP&7: &6PrisonButBad&e.&6Minehut&e.&6GG   &7[&61.20.4 RECOMMEND&7]"));
+    }
+    public void giveWardenKit(Player p){
+        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
+        ItemMeta cardm2 = card2.getItemMeta();
+        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
+        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
+        card2.setItemMeta(cardm2);
+        p.getInventory().addItem(card2);
 
+        p.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
+        p.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+        p.getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+        p.getInventory().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
+
+        ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
+        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+        wardenSword.addEnchantment(Enchantment.DURABILITY, 2);
+
+
+        p.getInventory().addItem(wardenSword);
+        p.getInventory().addItem(new ItemStack(Material.BOW));
+        p.getInventory().addItem(new ItemStack(Material.ARROW, 64));
+        p.getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
+
+        ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
+        ItemMeta cardm = card.getItemMeta();
+        cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
+        card.setItemMeta(cardm);
+        p.getInventory().addItem(card);
+
+        if (p.getInventory().getHelmet() != null)
+            p.getInventory().getHelmet().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        if (p.getInventory().getChestplate() != null)
+            p.getInventory().getChestplate().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        if (p.getInventory().getLeggings() != null)
+            p.getInventory().getLeggings().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        if (p.getInventory().getBoots() != null)
+            p.getInventory().getBoots().addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+    }
+    public void setWarden(Player nw){
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + nw.getName() + " only prison:mprison");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (PrisonGame.roles.get(p) != Role.PRISONER) {
+                MyListener.playerJoin(p, false);
+            }
+            PrisonGame.roles.put(p, Role.PRISONER);
+            PrisonGame.askType.put(p, 0);
+            p.playSound(p, Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
+            p.sendTitle("", ChatColor.RED + nw.getName() + ChatColor.GREEN + " is the new warden!");
+            PrisonGame.wardenCooldown = 20 * 6;
+        }
+        nw.getInventory().clear();
+        nw.getWorld()
+                .getEntitiesByClass(Item.class)
+                .forEach(Entity::remove);
+        PrisonGame.warden = nw;
+        Bukkit.getScoreboardManager().getMainScoreboard().getTeam("Warden").addPlayer(nw);
+        if (PrisonGame.savedPlayerGuards.containsKey(PrisonGame.warden)) {
+            for (Player pe : Bukkit.getOnlinePlayers()) {
+                if (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).containsKey(pe.getUniqueId())) {
+                    switch (PrisonGame.savedPlayerGuards.get(PrisonGame.warden.getUniqueId()).get(pe.getUniqueId())) {
+                        case 2 -> PrisonGame.setNurse((Player) pe, false);
+                        case 1 -> PrisonGame.setGuard((Player) pe, false);
+                        case 3 -> PrisonGame.setSwat((Player) pe, false);
+                        default -> ((Player) pe).sendMessage("An error has occurred.");
+                    }
+                }
+            }
+        }
+
+        PrisonGame.roles.put(nw, Role.WARDEN);
+        PrisonGame.swat = false;
+        PrisonGame.chatmuted = false;
+        PrisonGame.grammar = false;
+        nw.teleport(PrisonGame.active.getWarden().getLocation());
+        nw.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
+        nw.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
+        nw.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "WARDEN" + ChatColor.GRAY + "] " + ChatColor.WHITE + nw.getName());
+
+        nw.setNoDamageTicks(20 * 15);
+        PrisonGame.instance.giveWardenKit(nw);
+
+        nw.setHealth(20);
+    }
+    public void openBertude(Boolean showAll, Player p){
+        p.closeInventory();
+        p.sendMessage("hello i am bertrude");
+        p.playSound(p, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+        Inventory inv = Bukkit.createInventory(null, 9, "bertrude");
+        inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.BLUE + "old tab", ChatColor.GRAY + "sets tab to the default minecraft one, if you're boring."+isKeyBooleanEnabled(p, Keys.OLD_TAB)));
+        inv.addItem(PrisonGame.createGuiItem(Material.POTION, ChatColor.LIGHT_PURPLE + "epic bertude night vision", ChatColor.GRAY + "gives you night vision i think"+isKeyBooleanEnabled(p, Keys.NIGHT_VISION)));
+        inv.addItem(PrisonGame.createGuiItem(Material.IRON_SWORD, ChatColor.GRAY + "no spy :(", ChatColor.GRAY + "toggle spy get in roll thingy fr.."+isKeyBooleanEnabled(p, Keys.NOSPY)));
+        inv.addItem(PrisonGame.createGuiItem(Material.GOLD_NUGGET, ChatColor.GOLD + "ping noises", ChatColor.GRAY + "toggles ping noises"+isKeyBooleanEnabled(p, Keys.PING_NOISES)));
+        if(showAll){
+            inv.addItem(PrisonGame.createGuiItem(Material.NETHERITE_SWORD, ChatColor.LIGHT_PURPLE + "-1 dollar", ChatColor.GRAY + "this is a robbery"));
+            inv.addItem(PrisonGame.createGuiItem(Material.SHULKER_BOX, ChatColor.DARK_PURPLE + "buy shulker box", ChatColor.GRAY + "buy a shulker box to expand your ender chest", ChatColor.GRAY + "costs " + ChatColor.GREEN + "4000$"));
+        }
+        p.openInventory(inv);
+    }
+    private String isKeyBooleanEnabled(Player p, Key key){
+        if(key.get(p, 0).equals(1)) return ChatColor.GREEN+" (TRUE)";
+        return ChatColor.RED+" (FALSE)";
+    }
 }

@@ -12,6 +12,7 @@ import me.coralise.spigot.enums.Punishment
 import org.bukkit.OfflinePlayer
 import java.util.*
 
+
 fun issueBan(player: OfflinePlayer, duration: String, reason: String) {
     val playerManager = cbp.plm
     val cbpPlayer = playerManager.getCBPlayer(player.uniqueId)

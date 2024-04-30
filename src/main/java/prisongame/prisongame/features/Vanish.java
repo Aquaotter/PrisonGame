@@ -14,9 +14,6 @@ public class Vanish implements Feature {
     @Override
     public void execute() {
         for (var player : Bukkit.getOnlinePlayers()) {
-            if(player.getPersistentDataContainer().has(VanishCommand.VANISHED)){
-                PrisonGame.escaped.put(player, true);
-            }
             for (Player player2 : Bukkit.getOnlinePlayers())
                 if (!player.canSee(player2) && player.isOnline())
                     if (!player2.isInsideVehicle() && player2.isOnline() && !player2.getPersistentDataContainer().has(VanishCommand.VANISHED))

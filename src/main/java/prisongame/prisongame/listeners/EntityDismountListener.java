@@ -1,5 +1,7 @@
 package prisongame.prisongame.listeners;
 
+import com.comphenix.protocol.PacketType;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

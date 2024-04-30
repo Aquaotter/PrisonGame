@@ -13,12 +13,12 @@ import java.util.Arrays;
 public class StaffChatCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        String msg = "";
-        for(String substring : strings){
-            msg += " "+substring;
-        }
+        String message = String.join(" ", strings);
         for(Player p : Bukkit.getOnlinePlayers()){
-            p.sendMessage(PrisonGame.mm.deserialize("<gray>[<red>STAFF CHAT<gray>] <red>"+commandSender.getName()+"<gray>:<red>"+msg));
+            if(p.hasPermission("pbb.staff")) {
+            p.sendMessage(PrisonGame.mm.deserialize("<gray>[<red>STAFF CHAT<gray>] <red>" + commandSender.getName() + "<gray>:<red> " + message));
+            return true;
+            }
         }
         return true;
     }

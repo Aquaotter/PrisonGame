@@ -18,6 +18,9 @@ public class EntityDamageListener implements Listener {
         }
         if (event.getEntity() instanceof Player) {
             Player p = (Player) event.getEntity();
+            if(p.hasPotionEffect(PotionEffectType.WEAKNESS) || p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)){
+                event.setCancelled(true);
+            }
             p.setCooldown(Material.IRON_DOOR, 75);
             if (p.getCustomName().contains("ASCENDING")) {
                 event.setCancelled(true);

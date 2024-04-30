@@ -20,12 +20,13 @@ public class BlackMarket implements Feature {
 
             if (role == Role.PRISONER || role == Role.WARDEN)
                 continue;
-
-            player.sendMessage(ChatColor.RED + "You can't be in here!");
-            player.playSound(player, Sound.ENTITY_PILLAGER_AMBIENT, 1.5f, 0.75f);
-            player.damage(6);
-            player.removePotionEffect(PotionEffectType.UNLUCK);
-            player.teleport(PrisonGame.active.getBlackMarketOut().getLocation());
+            if(player.hasPotionEffect(PotionEffectType.UNLUCK)) {
+                player.sendMessage(ChatColor.RED + "You can't be in here!");
+                player.playSound(player, Sound.ENTITY_PILLAGER_AMBIENT, 1.5f, 0.75f);
+                player.damage(6);
+                player.removePotionEffect(PotionEffectType.UNLUCK);
+                player.teleport(PrisonGame.active.getBlackMarketOut().getLocation());
+            }
         }
     }
 }

@@ -40,11 +40,13 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
         BOUNTY,
         LUMBERJACK,
         PLUMBER,
-        CODCOOKER
+        CODCOOKER,
+        ESCAPECOUNT
 
 
     }
     public Instant lastLeaderboardUpdatePlaytime = Instant.now().minus(MINUTES_PER_REFRESH * 2, ChronoUnit.MINUTES);
+    public Instant lastLeaderboardUpdateEscapeCount = Instant.now().minus(MINUTES_PER_REFRESH * 2, ChronoUnit.MINUTES);
     public Instant lastLeaderboardUpdateBells = Instant.now().minus(MINUTES_PER_REFRESH * 2, ChronoUnit.MINUTES);
     public Instant lastLeaderboardUpdateMoney = Instant.now().minus(MINUTES_PER_REFRESH * 2, ChronoUnit.MINUTES);
     public Instant lastLeaderboardUpdateKills = Instant.now().minus(MINUTES_PER_REFRESH * 2, ChronoUnit.MINUTES);
@@ -58,6 +60,7 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
     public Instant lastLeaderboardUpdateBounty = Instant.now().minus(MINUTES_PER_REFRESH * 2, ChronoUnit.MINUTES);
     public Instant lastLeaderboardUpdateShoveling = Instant.now().minus(MINUTES_PER_REFRESH * 2, ChronoUnit.MINUTES);
     public Component leaderboardplaytime = Component.empty();
+    public Component leaderboardEscapeCount = Component.empty();
     public Component leaderboardBellsRung = Component.empty();
     public Component leaderboardmoney = Component.empty();
     public Component leaderboardKills = Component.empty();
@@ -71,6 +74,7 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
     public Component leaderboardBounty = Component.empty();
     public Component leaderboardShoveling = Component.empty();
     public boolean currentlyUpdatingPlaytime = false;
+    public boolean currentlyUpdatingEscapeCount = false;
     public boolean currentlyUpdatingMoney = false;
     public boolean currentlyUpdatingBellsRung = false;
     public boolean currentlyUpdatingDeaths = false;
@@ -101,13 +105,13 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
             page = Integer.parseInt(args[1]) * 10;
         }else{
             page = 0;
-            sender.sendMessage(PrisonGame.mm.deserialize("<red>Default to Page 1 <gray>(/leaderboard <leaderboard_name> <page>"));
         }
         var rest = Arrays.stream(args).toList().subList(1, args.length).toArray(String[]::new);
 
         return switch (action) {
             case MONEY -> veiwleaderboardmoney(sender, page, rest);
             case PLAYTIME -> veiwleaderboardplaytime(sender, page, rest);
+            case ESCAPECOUNT -> veiwleaderboardEscapeCount(sender, page, rest);
             case BELLS -> veiwLeaderboardBellsRung(sender, page, rest);
             case KILLS -> veiwLeaderboardKills(sender, page, rest);
             case DEATHS -> veiwLeaderboardDeaths(sender, page, rest);
@@ -252,6 +256,75 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
                 this.leaderboardplaytime = message;
                 sender.sendMessage(message);
                 lastLeaderboardUpdatePlaytime = Instant.now();
+            } catch (IOException exception) {
+                sender.sendMessage(PrisonGame.mm.deserialize("<red>Failed to fetch the current season."));
+            }
+        }).start();
+
+        return true;
+    }
+    private boolean veiwleaderboardEscapeCount(CommandSender sender, int page, String[] args) {
+        if (Instant.now().getEpochSecond() - lastLeaderboardUpdateEscapeCount.getEpochSecond() < MINUTES_PER_REFRESH * 60) {
+            sender.sendMessage(leaderboardEscapeCount);
+            return true;
+        }
+
+        if (currentlyUpdatingEscapeCount) {
+            sender.sendMessage(PrisonGame.mm.deserialize("<red>The leaderboard is currently updating (Escape Count). Please try again in a few seconds."));
+            return true;
+        }
+
+        sender.sendMessage(PrisonGame.mm.deserialize("<gray>Updating the leaderboard (Escape Count). This may take a few seconds..."));
+        currentlyUpdatingEscapeCount = true;
+
+        new Thread(() -> {
+            try {
+                var EscapeCountCache = new HashMap<OfflinePlayer, Double>();
+                var season = SeasonCommand.getCurrentSeason();
+                var leaderboard = Arrays.stream(Bukkit.getOfflinePlayers())
+                        .toList()
+                        .stream()
+                        .sorted((p1, p2) -> {
+                            var money1 = getEscapeCount(p1, season, EscapeCountCache);
+                            var money2 = getEscapeCount(p2, season, EscapeCountCache);
+
+                            if (money2 < money1)
+                                return -1;
+                            else if (money2 == money1)
+                                return 0;
+                            else return 1;
+                        })
+                        .toList();
+
+                var message = Component.empty();
+
+                for (int i = page; i < 10; i++) {
+                    if (i >= leaderboard.size())
+                        break;
+
+                    if (!message.equals(Component.empty()))
+                        message = message.append(Component.newline());
+
+                    var player = leaderboard.get(i);
+                    var money = EscapeCountCache.get(player);
+
+                    message = message.append(PrisonGame.mm.deserialize(
+                            "<position> <player> <dark_gray>-</dark_gray> <money>",
+                            Placeholder.component("position", Component
+                                    .text("#" + (i + 1))
+                                    .color(NamedTextColor.GRAY)),
+                            Placeholder.component("player", Component.text(player.getName())),
+                            Placeholder.component("money", Component
+                                    .text(PrisonGame.formatBalance(money) + " Escapes")
+                                    .color(NamedTextColor.GREEN))
+                    ));
+                }
+
+
+                currentlyUpdatingEscapeCount = false;
+                this.leaderboardEscapeCount = message;
+                sender.sendMessage(message);
+                lastLeaderboardUpdateEscapeCount = Instant.now();
             } catch (IOException exception) {
                 sender.sendMessage(PrisonGame.mm.deserialize("<red>Failed to fetch the current season."));
             }
@@ -591,7 +664,6 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
                                     .color(NamedTextColor.GREEN))
                     ));
                 }
-
 
                 currentlyUpdatingAllWardenTime = false;
                 this.leaderboardAllWardenTime= message;
@@ -1070,7 +1142,7 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
 
         var holder = new OfflinePlayerHolder(player);
         var playerSeason = Keys.SEASON.get(holder, 0);
-        var money = playerSeason != season ? 0.0 : player.getStatistic(Statistic.PLAY_ONE_MINUTE)/20/60;
+        var money = playerSeason != season ? 0.0 : player.getStatistic(Statistic.PLAY_ONE_MINUTE)/20/60/60;
 
         if (money == Double.POSITIVE_INFINITY)
             money = 0.0;
@@ -1176,7 +1248,7 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
     }
     private double getAllWardenTime(OfflinePlayer player, int season, HashMap<OfflinePlayer, Double> cache) {
         if (player.isOnline()) {
-            double money = (double) Keys.ALLWARDENTIME.get(player.getPlayer(), 0)/20/60;
+            double money = (double) Keys.ALLWARDENTIME.get(player.getPlayer(), 0)/20/60/60;
 
             if (money == Double.POSITIVE_INFINITY)
                 money = 0.0;
@@ -1190,7 +1262,7 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
 
         var holder = new OfflinePlayerHolder(player);
         var playerSeason = Keys.SEASON.get(holder, 0);
-        var money = playerSeason != season ? 0.0 : Keys.ALLWARDENTIME.get(player.getPlayer(), 0)/20/60;
+        var money = playerSeason != season ? 0.0 : Keys.ALLWARDENTIME.get(player.getPlayer(), 0)/20/60/60;
 
         if (money == Double.POSITIVE_INFINITY)
             money = 0.0;
@@ -1335,6 +1407,30 @@ public class LeaderboardCommand implements CommandExecutor { // TODO Find a bett
         var holder = new OfflinePlayerHolder(player);
         var playerSeason = Keys.SEASON.get(holder, 0);
         var money = playerSeason != season ? 0.0 : Keys.COOKEDFISH_COUNT.get(player.getPlayer(), 0);
+
+        if (money == Double.POSITIVE_INFINITY)
+            money = 0.0;
+
+        cache.put(player, money);
+        return money;
+    }
+    private double getEscapeCount(OfflinePlayer player, int season, HashMap<OfflinePlayer, Double> cache) {
+        if (player.isOnline()) {
+            double money = (double) Keys.ESCAPE_COUNT.get(player.getPlayer(), 0);
+
+            if (money == Double.POSITIVE_INFINITY)
+                money = 0.0;
+
+            cache.put(player, money);
+            return money;
+        }
+
+        if (cache.containsKey(player))
+            return cache.get(player);
+
+        var holder = new OfflinePlayerHolder(player);
+        var playerSeason = Keys.SEASON.get(holder, 0);
+        var money = playerSeason != season ? 0.0 : Keys.ESCAPE_COUNT.get(player.getPlayer(), 0);
 
         if (money == Double.POSITIVE_INFINITY)
             money = 0.0;

@@ -28,6 +28,7 @@ val fallbackConfig = Config(
         guild = "",
         chatChannel = "",
         commandsChannel = "",
+        punshmentChannel = "",
         filterChannel = "",
         linkedRole = "",
         canSpeakRole = ""

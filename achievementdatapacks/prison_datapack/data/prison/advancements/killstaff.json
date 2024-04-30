@@ -5,10 +5,10 @@
             "text": "Don't want no diamonds n' pearls"
         },
         "description": {
-            "text": "Kill a guard with a wooden axe"
+            "text": "Kill a guard with a iron pickaxe"
         },
         "icon": {
-            "item": "minecraft:wooden_axe"
+            "item": "minecraft:iron_pickaxe"
         },
         "frame": "task",
         "show_toast": true,

@@ -11,6 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.FilteredWords;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.config.filter.FilterAction;
@@ -21,6 +22,10 @@ public class TeamChatCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("Only players can use this command.");
+            return true;
+        }
+        if (player.hasPotionEffect(PotionEffectType.WATER_BREATHING)) {
+            sender.sendMessage(PrisonGame.mm.deserialize("<red>You can't talk while in sotil!"));
             return true;
         }
 

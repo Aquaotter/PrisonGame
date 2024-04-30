@@ -112,7 +112,7 @@ public class PDCCommand implements CommandExecutor {
                 PrisonGame.instance.getLogger().severe(exception.getMessage());
                 return true;
             }
-        }
+        }""
 
         return true;
     }

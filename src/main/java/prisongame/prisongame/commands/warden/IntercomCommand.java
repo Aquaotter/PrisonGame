@@ -84,7 +84,7 @@ public class IntercomCommand implements CommandExecutor {
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage("");
-        Messages.INSTANCE.onIntercom(b.toString());
+        Messages.INSTANCE.onIntercom(ChatColor.stripColor(b.toString().substring(16)));
         return true;
     }
 }

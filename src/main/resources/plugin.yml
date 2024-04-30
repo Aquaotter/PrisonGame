@@ -126,3 +126,4 @@ commands:
     description: Send message to fellow staff members!
     permission: pbb.staff
     aliases: /sc
+  stats:

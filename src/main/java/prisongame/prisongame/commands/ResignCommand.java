@@ -22,6 +22,13 @@ public class ResignCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!((Player) sender).hasCooldown(Material.IRON_DOOR)) {
             Player p = (Player) sender;
+            if(p.hasPotionEffect(PotionEffectType.WEAKNESS) || p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)){
+                boolean onRollCall = p.hasPotionEffect(PotionEffectType.JUMP);
+                String onWhat = "Handcuffed!";
+                if(onRollCall) onWhat = "on RollCall!";
+                p.sendMessage(PrisonGame.mm.deserialize("<red>You can't resign while being "+onWhat));
+                return true;
+            }
             if (!((Player) sender).getDisplayName().contains("SOLITARY") && !new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() - 1, p.getLocation().getZ()).getBlock().getType().equals(Material.RED_SAND) && !p.hasPotionEffect(PotionEffectType.WEAKNESS) && !p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
                 if (PrisonGame.warden != null) {
                     if (PrisonGame.warden.equals(sender)) {
@@ -39,6 +46,7 @@ public class ResignCommand implements CommandExecutor {
                     }
                 }
                 PrisonGame.roles.put((Player) sender, Role.PRISONER);
+                ((Player) sender).clearActivePotionEffects();
                 MyListener.playerJoin((Player) sender, false);
             }
         } else {

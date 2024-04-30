@@ -1,5 +1,7 @@
 package prisongame.prisongame.listeners;
 
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -7,7 +9,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
+import oshi.jna.platform.mac.SystemB;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.discord.listeners.Messages;
@@ -60,19 +64,21 @@ public class PlayerDeathListener implements Listener {
             ) {
                 p.getKiller().playSound(p.getKiller(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 2);
                 if (p.hasPotionEffect(PotionEffectType.GLOWING)) {
-                    p.getKiller().sendMessage(ChatColor.GREEN + "You gained a little bit of money for killing a criminal.");
                     double GainCash = 0;
                     double bountylvl = Keys.SWORD_UPGRADE.get(p, 0);
                     if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
                         if(bountylvl==1) GainCash = 212.0;
                         if(bountylvl==2) GainCash = 343.75;
                         if(bountylvl==0) GainCash = 125.0;
+                        if(killer.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) GainCash = 375.0;
                     }else {
                         if(bountylvl==1) GainCash = 170.0;
                         if(bountylvl==2) GainCash = 275.0;
                         if(bountylvl==0) GainCash = 100.0;
+                        if(killer.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) GainCash = 300.0;
                     }
                     Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + GainCash);
+                    p.getKiller().sendMessage(ChatColor.GREEN + "You gained a little bit of money for killing a criminal. "+ChatColor.GRAY+"("+GainCash+")");
                 } else {
                     if (PrisonGame.roles.get(p.getKiller()) == Role.PRISONER) {
                         p.getKiller().addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 5, 0));
@@ -86,10 +92,11 @@ public class PlayerDeathListener implements Listener {
                 double increasearg = 1;
                 double wardenDeathAmount = 750;
                 double guardDeathAmount = 150;
-                double swatDeathAmount = 300;
+                double swatDeathAmount = 300;   
                 double nurseDeathAmount = 100;
                 if(bountylvl==1) increasearg=1.5;
                 if(bountylvl==2) increasearg=2;
+                if(killer.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD)) increasearg = 2.5;
                 if(IsEscaped){
                     if(PrisonGame.roles.get(p) == Role.WARDEN){
                         paidedamount=wardenDeathAmount;
@@ -111,7 +118,9 @@ public class PlayerDeathListener implements Listener {
                         Keys.MONEY.set(p.getKiller(), Keys.MONEY.get(p.getKiller(), 0.0) + paidedamount);
                         roleKilled = ChatColor.LIGHT_PURPLE+"Nurse";
                     }
-                    killer.sendMessage(ChatColor.GREEN+"You have Gained "+paidedamount+" from killing the "+roleKilled+ ChatColor.GREEN +" as a Criminal!");
+                    if(!(PrisonGame.roles.get(p) == Role.PRISONER)){
+                        killer.sendMessage(ChatColor.GREEN + "You gained a little bit of money for killing a guard role. "+ChatColor.GRAY+"("+paidedamount+")");
+                    }
                 }
                 TryAxe(event.getPlayer());
                 // =-=-=
@@ -142,25 +151,24 @@ public class PlayerDeathListener implements Listener {
 
             playerPassenger.removePotionEffect(PotionEffectType.DOLPHINS_GRACE);
         }
-
         if (killer != null) {
             if (!killer.equals(player) ) {
                 var inventory = killer.getInventory();
                 var mainHand = inventory.getItemInMainHand();
                 var meta = mainHand.getItemMeta();
-                if (
-                        meta != null &&
-                        meta.getDisplayName().equals(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]") &&
-                        !killer.hasCooldown(Material.IRON_SHOVEL) &&
-                        !killer.hasPotionEffect(PotionEffectType.UNLUCK) &&
-                        player.getPassengers().isEmpty() && !killer.hasPotionEffect(PotionEffectType.WEAKNESS) && killer.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)
-                ) {
+                boolean isHandCuffOrBm = killer.hasPotionEffect(PotionEffectType.WEAKNESS) && killer.hasPotionEffect(PotionEffectType.UNLUCK) && killer.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE);
+                boolean hasAnotherPlayerHandcuff = killer.getPassengers().isEmpty();
+                if (mainHand.getType().equals(Material.IRON_SHOVEL) && !killer.hasCooldown(Material.IRON_SHOVEL) && !isHandCuffOrBm && hasAnotherPlayerHandcuff) {
                     event.setCancelled(true);
                     event.getEntity().addPotionEffect(PotionEffectType.WEAKNESS.createEffect(20 * 30, 255));
                     event.getEntity().addPotionEffect(PotionEffectType.DOLPHINS_GRACE.createEffect(20 * 30, 255));
                     event.getEntity().sendTitle(ChatColor.RED + "HANDCUFFED!", ChatColor.GOLD+"by "+killer.getName(), 20, 160, 20);
+                    PlayerDisguise playerDisguise = new PlayerDisguise(event.getPlayer().getName());
+                    playerDisguise.setKeepDisguiseOnPlayerDeath(false);
+                    DisguiseAPI.disguiseToAll(event.getEntity(), playerDisguise);
                     Player p = event.getEntity();
                     p.getKiller().addPassenger(p);
+                    p.hidePlayer(PrisonGame.instance, killer);
                     event.getEntity().getKiller().sendMessage(ChatColor.GREEN + "Shift to drop players.");
                     return;
                 }
@@ -224,7 +232,19 @@ public class PlayerDeathListener implements Listener {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:impostor");
                         }
                     }
+                    if(PrisonGame.roles.get(event.getEntity().getKiller()) == Role.GUARD){
+                        PrisonGame.axekills.putIfAbsent(event.getPlayer(), 0);
+                        PrisonGame.axekills.put(player, PrisonGame.axekills.get(player) + 1);
+                        if(PrisonGame.axekills.get(player) >= 5){
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:oneman");
+                        }else if(PrisonGame.axekills.get(player) >= 1){
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killstaff");
+                        }
+                    }
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getKiller().getName() + " only prison:killwarden");
+                }
+                if(PrisonGame.wardentime.get(event.getEntity()) / 20 / 60 == 155){
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:failed_attempt");
                 }
                 if (PrisonGame.wardentime.get(event.getEntity()) / 20 / 60 >= 120) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:afinishedstory");
@@ -240,9 +260,17 @@ public class PlayerDeathListener implements Listener {
             }
         }
         if (!getConfig().getDev())
-            Messages.INSTANCE.onDeath(player, killer, event.getDeathMessage());
+            Messages.INSTANCE.onDeath(player, killer, ChatColor.stripColor(event.getDeathMessage()));
         if (PrisonGame.roles.get(event.getEntity()) == Role.PRISONER) {
-            event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
+            if(killer.hasPotionEffect(PotionEffectType.FAST_DIGGING)){
+                if(killer.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD) ) {
+                    event.setDeathMessage(null);
+                }else{
+                    event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
+                }
+            }else{
+                event.setDeathMessage(ChatColor.GRAY + event.getDeathMessage());
+            }
             if (event.getEntity().getKiller() != null) {
                 if (PrisonGame.roles.get(event.getEntity().getKiller()) == Role.WARDEN && event.getEntity().hasPotionEffect(PotionEffectType.UNLUCK)) {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getEntity().getName() + " only prison:badluck");
@@ -253,7 +281,15 @@ public class PlayerDeathListener implements Listener {
             }
         }
         if (PrisonGame.roles.get(event.getEntity()) != Role.PRISONER) {
-            event.setDeathMessage(ChatColor.GOLD + event.getDeathMessage());
+            if(killer.hasPotionEffect(PotionEffectType.FAST_DIGGING)){
+                if(killer.getInventory().getItemInMainHand().getType().equals(Material.IRON_SWORD) ) {
+                    event.setDeathMessage(null);
+                }else{
+                    event.setDeathMessage(ChatColor.GOLD + event.getDeathMessage());
+                }
+            }else{
+                event.setDeathMessage(ChatColor.GOLD + event.getDeathMessage());
+            }
         }
     }
 }

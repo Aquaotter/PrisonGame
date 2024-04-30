@@ -11,7 +11,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import oshi.jna.platform.mac.SystemB;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.config.Prison;
 
 import static prisongame.prisongame.config.ConfigKt.getConfig;
 
@@ -48,7 +51,7 @@ public class BuilderCommand implements CommandExecutor {
         }
 
         inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.YELLOW + "Teleport All Creative [CMD]", "tp @a[gamemode=creative] @s"));
-        inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.YELLOW + "Get Coords [CUSTOM]", "gets you the coords required for me to put in the plugin"));
+        inv.addItem(PrisonGame.createGuiItem(Material.PLAYER_HEAD, ChatColor.YELLOW + "Get Cords [CUSTOM]", "gets you the cords required for me to put in the plugin"));
 
         player.openInventory(inv);
         return true;

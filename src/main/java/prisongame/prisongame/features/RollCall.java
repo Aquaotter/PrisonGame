@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.keys.Keys;
 import prisongame.prisongame.lib.Role;
 
@@ -40,7 +41,7 @@ public class RollCall implements Feature {
             player.removePotionEffect(PotionEffectType.BAD_OMEN);
             world.getWorldBorder().setWarningDistance(5);
 
-            if (role != Role.PRISONER && PrisonGame.hardmode.get(player)) {
+            if (role != Role.PRISONER && PrisonGame.hardmode.get(player) && !(player.getPersistentDataContainer().has(VanishCommand.VANISHED))) {
                 if (below.getType() != Material.LIGHT_BLUE_CONCRETE_POWDER) {
                     player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
                             Duration.ZERO,
@@ -56,8 +57,9 @@ public class RollCall implements Feature {
                     player.addPotionEffect(PotionEffectType.GLOWING.createEffect(20 * 30, 0));
                     player.removePotionEffect(PotionEffectType.JUMP);
                 } else {
-                    if (player.hasPotionEffect(PotionEffectType.GLOWING) && player.getGameMode() != GameMode.SPECTATOR) {
+                    if (player.hasPotionEffect(PotionEffectType.GLOWING) && player.getGameMode() != GameMode.SPECTATOR && !(player.getPersistentDataContainer().has(VanishCommand.VANISHED))) {
                         player.sendMessage(PrisonGame.mm.deserialize("<green>You came to roll call!"));
+                        PrisonGame.saidcycle.put(player, PrisonGame.saidcycle.get(player) + 1);
                         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                     }
 
@@ -69,7 +71,7 @@ public class RollCall implements Feature {
                 }
             }
 
-            if (role == Role.PRISONER && !PrisonGame.escaped.get(player)) {
+            if (role == Role.PRISONER && !PrisonGame.escaped.get(player) && !(player.getPersistentDataContainer().has(VanishCommand.VANISHED))) {
                 if (below.getType() != Material.RED_SAND) {
                     player.sendTitlePart(TitlePart.TIMES, Title.Times.times(
                             Duration.ZERO,
@@ -92,8 +94,9 @@ public class RollCall implements Feature {
                     if (scoreboard.getPlayerTeam(player) == scoreboard.getTeam("Criminals"))
                         scoreboard.getTeam("Prisoners").addPlayer(player);
 
-                    if (player.hasPotionEffect(PotionEffectType.GLOWING) && player.getGameMode() != GameMode.SPECTATOR) {
+                    if (player.hasPotionEffect(PotionEffectType.GLOWING) && player.getGameMode() != GameMode.SPECTATOR && !(player.getPersistentDataContainer().has(VanishCommand.VANISHED))) {
                         player.sendMessage(PrisonGame.mm.deserialize("<green>You came to roll call!"));
+                        PrisonGame.saidcycle.put(player, PrisonGame.saidcycle.get(player) + 1);
                         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BIT, 1, 1);
                     }
 

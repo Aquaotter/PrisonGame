@@ -1,10 +1,12 @@
 package prisongame.prisongame.features;
 
+import com.sun.jna.platform.win32.WinBase;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.keys.Keys;
 
 /**
  * Keeps track of various goals for advancements.
@@ -14,6 +16,7 @@ public class Advancements implements Feature {
     private final Advancement WHAT_U_WORRIED = getAdvancement("whatuworried");
     private final Advancement DEWATER = getAdvancement("dewater");
     private final Advancement PIGGO = getAdvancement("piggo");
+    private final Advancement GOLDDIGGER = getAdvancement("golddigger");
 
     @Override
     public void schedule() {
@@ -25,6 +28,7 @@ public class Advancements implements Feature {
         for (var player : Bukkit.getOnlinePlayers()) {
             checkWhatUWorried(player);
             checkDewater(player);
+            checkGoldDigger(player);
         }
 
         checkDictatorship();
@@ -69,6 +73,12 @@ public class Advancements implements Feature {
         if (time / 20 / 60 >= 15 && !progress.isDone()) {
             PrisonGame.worryachieve.put(player, -1);
             progress.awardCriteria("impossible");
+        }
+    }
+    private void checkGoldDigger(Player p){
+        int shoveled = Keys.SHOVELING_COUNT.get(p, 0);
+        if(shoveled >= 500 && p.getAdvancementProgress(GOLDDIGGER).equals(false)){
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + p.getName() + " only prison:golddigger");
         }
     }
 

@@ -1,6 +1,7 @@
 package prisongame.prisongame.features;
 
 import org.bukkit.Bukkit;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.keys.Keys;
 
@@ -14,7 +15,7 @@ public class NightVision implements Feature {
     public void execute() {
         for (var player : Bukkit.getOnlinePlayers())
             if (Keys.NIGHT_VISION.has(player))
-                player.addPotionEffect(PotionEffectType.NIGHT_VISION.createEffect(99999, 255));
+                player.addPotionEffect(PotionEffectType.NIGHT_VISION.createEffect(PotionEffect.INFINITE_DURATION, 255), true);
             else
                 player.removePotionEffect(PotionEffectType.NIGHT_VISION);
     }

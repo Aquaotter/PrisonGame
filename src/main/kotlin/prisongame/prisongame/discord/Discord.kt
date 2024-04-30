@@ -19,6 +19,7 @@ import prisongame.prisongame.discord.listeners.Messages
 lateinit var jda: JDA
 lateinit var guild: Guild
 lateinit var chatChannel: TextChannel
+lateinit var punshmentChannel: TextChannel
 lateinit var commandsChannel: TextChannel
 lateinit var filterChannel: TextChannel
 lateinit var linkedRole: Role
@@ -33,13 +34,14 @@ fun setup() {
         .enableIntents(GatewayIntent.GUILD_MESSAGES)
         .enableIntents(GatewayIntent.MESSAGE_CONTENT)
         .addEventListeners(Messages, Commands)
-        .setActivity(Activity.playing("Playing PrisonButBad.Minehut.GG"))
+        .setActivity(Activity.playing("Playing `PrisonButBad.Minehut.GG` 1.20.4"))
         .build();
 
     jda.awaitReady()
     guild = jda.getGuildById(config.discord.guild)!!
     chatChannel = jda.getTextChannelById(config.discord.chatChannel)!!
     commandsChannel = jda.getTextChannelById(config.discord.commandsChannel)!!
+    punshmentChannel = jda.getTextChannelById(config.discord.punshmentChannel)!!
     filterChannel = jda.getTextChannelById(config.discord.filterChannel)!!
     linkedRole = jda.getRoleById(config.discord.linkedRole)!!
     canSpeakRole = jda.getRoleById(config.discord.canSpeakRole)!!
@@ -60,10 +62,16 @@ fun setup() {
             .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
         Command.slash("unban", "Unban players from PrisonButBad.")
             .addOption(OptionType.STRING, "player", "The player to unban.", true, true)
+            .addOption(OptionType.STRING, "reason", "The unban reason.", false, true)
             .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
         Command.slash("unmute", "Unmute players from PrisonButBad.")
             .addOption(OptionType.STRING, "player", "The player to unmute.", true, true)
-            .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS))
+            .addOption(OptionType.STRING, "reason", "The unmute reason.", false, true)
+            .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
+        Command.slash("history", "Gets player History from PrisonButBad [TEST SERVER].")
+            .addOption(OptionType.STRING, "player", "The player to get History", true, false)
+            .addOption(OptionType.STRING, "page", "Page of Players History", true, false)
+            .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.BAN_MEMBERS)),
     ).queue()
 }
 

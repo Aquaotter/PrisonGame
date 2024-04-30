@@ -1,5 +1,6 @@
 package prisongame.prisongame.features;
 
+import com.google.common.util.concurrent.ClosingFuture;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.title.Title;
@@ -16,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import oshi.jna.platform.mac.SystemB;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.lib.Role;
 
 import java.time.Duration;
@@ -40,7 +42,7 @@ public class Schedule implements Feature {
     @Override
     public void execute() {
         var time = world.getTime();
-
+        if(time == 0) resetCycle();
         if (time > 0 && time < 2000)
             setRollCall(true);
 
@@ -126,12 +128,10 @@ public class Schedule implements Feature {
             var role = PrisonGame.roles.get(player);
 
             if (PrisonGame.escaped.get(player) || !player.hasPotionEffect(PotionEffectType.GLOWING) || role != Role.PRISONER || PrisonGame.builder.get(player)) {
-                PrisonGame.saidcycle.put(player, PrisonGame.saidcycle.get(player) + 1);
                 continue;
             }
 
-            if (player.hasPotionEffect(PotionEffectType.GLOWING) && role == Role.PRISONER) {
-                PrisonGame.saidcycle.put(player, PrisonGame.saidcycle.get(player) - 1);
+            if (player.hasPotionEffect(PotionEffectType.GLOWING) && role == Role.PRISONER && !(player.getPersistentDataContainer().has(VanishCommand.VANISHED))) {
                 Bukkit.broadcast(PrisonGame.mm.deserialize(
                         "<gold><player> didn't come to roll call! <red>Kill them for 100 dollars!",
                         Placeholder.component("player", player.name().color(NamedTextColor.RED))
@@ -148,6 +148,8 @@ public class Schedule implements Feature {
 
                 if (PrisonGame.hardmode.get(player))
                     player.damage(99999);
+            }else{
+                PrisonGame.saidcycle.put(player, PrisonGame.saidcycle.get(player) + 1);
             }
         }
     }
@@ -222,7 +224,7 @@ public class Schedule implements Feature {
                 ));
             }
 
-            if (role == Role.PRISONER && !PrisonGame.escaped.get(player)) {
+            if (role == Role.PRISONER && !PrisonGame.escaped.get(player) && !(player.getPersistentDataContainer().has(VanishCommand.VANISHED))) {
                 player.addPotionEffect(PotionEffectType.SATURATION.createEffect(20, 3));
                 player.getWorld().getWorldBorder().setWarningDistance(Integer.MAX_VALUE);
 
@@ -261,11 +263,16 @@ public class Schedule implements Feature {
     }
     private void endLightsOut(){
         for(Player p : Bukkit.getOnlinePlayers()){
-            if(p.isSleeping()) {
+            if(p.isSleeping() && !(p.getPersistentDataContainer().has(VanishCommand.VANISHED))) {
                 PrisonGame.saidcycle.put(p, PrisonGame.saidcycle.get(p) + 1);
             }else{
                 PrisonGame.saidcycle.put(p, PrisonGame.saidcycle.get(p) - 1);
             }
+        }
+    }
+    private void resetCycle(){
+        for(Player p : Bukkit.getOnlinePlayers()){
+            PrisonGame.saidcycle.put(p, 0);
         }
     }
 }

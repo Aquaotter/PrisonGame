@@ -2,19 +2,23 @@
 package prisongame.prisongame.discord.commands
 
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.Bukkit
 import prisongame.prisongame.PrisonGame
+import prisongame.prisongame.commands.staff.VanishCommand
 import prisongame.prisongame.lib.Role
 
 fun players(event: SlashCommandInteractionEvent) {
     val warden = PrisonGame.warden
     val embed = EmbedBuilder()
 
-    val players = Bukkit.getOnlinePlayers()
-    val prisoners = players.filter { PrisonGame.roles[it] == Role.PRISONER }
-    val guards = players.filter { PrisonGame.roles[it] != Role.WARDEN && it !in prisoners }
+    val allplayers = Bukkit.getOnlinePlayers()
+    val players = allplayers.filter { !it.persistentDataContainer.has(VanishCommand.VANISHED) }
+    val vanishedPlayers = players.filter { it.persistentDataContainer.has(VanishCommand.VANISHED) }
+    val prisoners = players.filter { PrisonGame.roles[it] == Role.PRISONER && !it.persistentDataContainer.has(VanishCommand.VANISHED) }
+    val guards = players.filter { PrisonGame.roles[it] != Role.WARDEN && it !in prisoners && !it.persistentDataContainer.has(VanishCommand.VANISHED) }
 
     val verb = if (players.size == 1) "is" else "are"
     val noun = if (players.size == 1) "player" else "players"
@@ -44,6 +48,14 @@ fun players(event: SlashCommandInteractionEvent) {
             else "**$display** [${it.ping}ms]"
         },
         false)
-
+    if(event.member?.hasPermission(Permission.BAN_MEMBERS) == true){ // @Goose pls rewrite this if needed -Aquaotter (I am not good at kotlin)
+        embed.addField(
+            "Vanished (${vanishedPlayers.size}) [ONLY STAFF CAN SEE THIS]",
+            vanishedPlayers.joinToString("\n") {
+                val display = PlainTextComponentSerializer.plainText().serialize(it.displayName())
+                "**$display** [${it.ping}ms]"
+            },
+            false)
+    }
     event.replyEmbeds(embed.build()).setEphemeral(true).queue();
 }

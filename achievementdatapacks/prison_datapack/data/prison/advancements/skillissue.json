@@ -17,7 +17,7 @@
     },
     "criteria": {
         "no": {
-            "trigger": "minecraft:nmng"
+            "trigger": "minecraft:impossible"
         }
     },
     "parent": "prison:yoink"

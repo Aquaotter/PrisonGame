@@ -7,19 +7,26 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import prisongame.prisongame.PrisonGame;
+import prisongame.prisongame.commands.staff.VanishCommand;
 import prisongame.prisongame.lib.Role;
 
 public class Handcuffs implements Feature {
     @Override
     public void schedule() {
-
+        scheduler.scheduleSyncRepeatingTask(plugin, this::execute, 0L, 1L);
     }
 
     @Override
     public void execute() {
         for (var player : Bukkit.getOnlinePlayers()) {
             for (var entity : player.getPassengers())
-                if (entity instanceof Player passenger && !passenger.hasPotionEffect(PotionEffectType.WEAKNESS) && !passenger.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)) {
+                if (entity instanceof Player passenger) {
+                    if (passenger.hasPotionEffect(PotionEffectType.WEAKNESS) || passenger.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE) || passenger.hasPotionEffect(PotionEffectType.LUCK)) {
+                        if(!(player.canSee(passenger)) && !(player.getPersistentDataContainer().has(VanishCommand.VANISHED)) ){
+                            player.hidePlayer(passenger);
+                        }
+                        return;
+                    }
                     player.removePassenger(passenger);
                     player.sendMessage(PrisonGame.mm.deserialize("<red>The handcuffs rotted away..."));
                     passenger.sendMessage(PrisonGame.mm.deserialize("<green>The handcuffs rotted away! <gray>(you're free)"));

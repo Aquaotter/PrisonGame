@@ -52,21 +52,6 @@ public class PlayerInteractListener implements Listener {
         }
     }
 
-    protected ItemStack createGuiItem(final Material material, final String name, final String... lore) {
-        final ItemStack item = new ItemStack(material, 1);
-        final ItemMeta meta = item.getItemMeta();
-
-        // Set the name of the item
-        meta.setDisplayName(name);
-
-        // Set the lore of the item
-        meta.setLore(Arrays.asList(lore));
-
-        item.setItemMeta(meta);
-
-        return item;
-    }
-
     @EventHandler
     public void onPlayerInteract2(PlayerInteractEvent event) {
         if(event.getPlayer().getGameMode().equals(GameMode.SPECTATOR)) return;
@@ -118,7 +103,7 @@ public class PlayerInteractListener implements Listener {
                             PrisonGame.BBpower = 0;
                             if (justUnpowered) {
                                 Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).setType(Material.AIR);
-                                Bukkit.broadcastMessage(ChatColor.RED + "The facility power has gone off! " + ChatColor.GREEN + "Prisoner now get speed, and a door has opened somewhere...");
+                                event.getPlayer().sendTitle(ChatColor.RED + "The facility power has gone off! ", ChatColor.GREEN + "Prisoner now get speed, and a door has opened somewhere...", 0, 20, 0);
                             }
                         }
                     } else {
@@ -160,7 +145,6 @@ public class PlayerInteractListener implements Listener {
                             double escapeamount = 10.0;
                             if(shovelingLvl==1) increasearg=1.25;
                             if(shovelingLvl==2) increasearg=1.5;
-                            if(shovelingLvl == 0) shovelingLvl=0;
                             if(PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())){
                                 paidedamount=(escapeamount*increasearg)+escapeamount;
                                 Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) + paidedamount * Schedule.jobMultiplier);
@@ -177,6 +161,7 @@ public class PlayerInteractListener implements Listener {
                             event.getClickedBlock().setType(Material.BEDROCK);
                             event.getPlayer().setCooldown(Material.WOODEN_SHOVEL, 10);
                             TryAxe(event.getPlayer());
+                            Keys.SHOVELING_COUNT.set(event.getPlayer(), Keys.SHOVELING_COUNT.get(event.getPlayer(), 0) + 1);
                             Bukkit.getScheduler().runTaskLater(PrisonGame.getPlugin(PrisonGame.class), () -> {
                                 event.getClickedBlock().setType(Material.COARSE_DIRT);
                             }, 20 * 10);
@@ -262,6 +247,16 @@ public class PlayerInteractListener implements Listener {
             }
             if (event.getClickedBlock().getType().equals(Material.OAK_WALL_SIGN)) {
                 org.bukkit.block.Sign sign = (org.bukkit.block.Sign) event.getClickedBlock().getState();
+                if(sign.getLine(2).equals("for a suprice!")){
+                    event.getPlayer().sendMessage(PrisonGame.mm.deserialize("<gray>Cookies!"));
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:sanan1010_cookies");
+                }
+                if(sign.getLine(1).equals("Witherstone")){
+                    if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 4000.0) {
+                        Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 4000);
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+event.getPlayer().getName()+" netherite_pickaxe{display:{Name:'[\"\",{\"text\":\"Witherstone\",\"italic\":false,\"color\":\"black\"}]'},Enchantments:[{lvl:1,id:sharpness},{lvl:1,id:knockback}]}");
+                    }
+                }
                 if(sign.getLine(1).equalsIgnoreCase("not meth")){
                     if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 2500.0) {
                         Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 2500);
@@ -474,7 +469,7 @@ public class PlayerInteractListener implements Listener {
                     inv.addItem(PrisonGame.createGuiItem(Material.PAPER, ChatColor.WHITE + "Paper", "&aRecipe:", "&b1 Coal", "&b1 Scrap Metal", "&a15$"));
                     inv.addItem(PrisonGame.createGuiItem(Material.TRIPWIRE_HOOK, ChatColor.LIGHT_PURPLE + "Fake Card", "&aRecipe:", "&b3 Paper", "&b2 Sticks"));
                     inv.addItem(PrisonGame.createGuiItem(Material.SHEARS, ChatColor.GRAY + "WireCutters", "&aRecipe:", "&b4 Scrap Metal", "&b2 Sticks", "&b1 Rock"));
-                    inv.addItem(PrisonGame.createGuiItem(Material.LEATHER_CHESTPLATE, ChatColor.DARK_GRAY + "Cloak", "&aRecipe:", "&b1 Coal", "&ba15$"));
+                    inv.addItem(PrisonGame.createGuiItem(Material.LEATHER_CHESTPLATE, ChatColor.DARK_GRAY + "Cloak", "&aRecipe:", "&b1 Coal", "&b15$"));
                     event.getPlayer().openInventory(inv);
                 }, 1L);
             }
@@ -526,35 +521,7 @@ public class PlayerInteractListener implements Listener {
                 if (sign.getLine(1).equals("Restore Kit")) {
                     if (PrisonGame.roles.get(event.getPlayer()) == Role.WARDEN) {
                         Player nw = event.getPlayer();
-                        nw.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
-                        nw.getInventory().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
-                        nw.getInventory().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-                        nw.getInventory().setBoots(new ItemStack(Material.IRON_BOOTS));
-
-                        ItemStack wardenSword = new ItemStack(Material.DIAMOND_SWORD);
-                        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 1);
-                        wardenSword.addEnchantment(Enchantment.DURABILITY, 2);
-
-
-                        ItemStack card2 = new ItemStack(Material.IRON_SHOVEL);
-                        ItemMeta cardm2 = card2.getItemMeta();
-                        cardm2.setDisplayName(ChatColor.BLUE + "Handcuffs " + ChatColor.RED + "[CONTRABAND]");
-                        cardm2.addEnchant(Enchantment.KNOCKBACK, 1, true);
-                        card2.setItemMeta(cardm2);
-                        nw.getInventory().addItem(card2);
-
-                        if (!event.getPlayer().getInventory().contains(wardenSword))
-                            nw.getInventory().addItem(wardenSword);
-                        if (!event.getPlayer().getInventory().contains(Material.BOW))
-                            nw.getInventory().addItem(new ItemStack(Material.BOW));
-
-                        if (!event.getPlayer().getInventory().contains(Material.TRIPWIRE_HOOK)) {
-                            ItemStack card = new ItemStack(Material.TRIPWIRE_HOOK);
-                            ItemMeta cardm = card.getItemMeta();
-                            cardm.setDisplayName(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]");
-                            card.setItemMeta(cardm);
-                            nw.getInventory().addItem(card);
-                        }
+                        PrisonGame.instance.giveWardenKit(nw);
                     }
                     if (PrisonGame.roles.get(event.getPlayer()) == Role.SWAT) {
                         Player g = event.getPlayer();
@@ -732,9 +699,19 @@ public class PlayerInteractListener implements Listener {
                     }
                 }
                 if (sign.getLine(2).equals("Steak")) {
-                    if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 5.0) {
-                        Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 5.0);
-                        event.getPlayer().getInventory().addItem(new ItemStack(Material.COOKED_BEEF));
+                    boolean buyStack = event.getPlayer().isSneaking();
+                    if(buyStack){
+                        if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 5.0 * 64) {
+                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 5.0 * 64);
+                            event.getPlayer().getInventory().addItem(new ItemStack(Material.COOKED_BEEF, 64));
+                            event.getPlayer().sendTitle("", ChatColor.GRAY+"You have Shift and bought 64 steak!", 0, 1, 0);
+                        }
+                    }else {
+                        if (Keys.MONEY.get(event.getPlayer(), 0.0) >= 5.0) {
+                            Keys.MONEY.set(event.getPlayer(), Keys.MONEY.get(event.getPlayer(), 0.0) - 5.0);
+                            event.getPlayer().getInventory().addItem(new ItemStack(Material.COOKED_BEEF));
+                            event.getPlayer().sendTitle("", ChatColor.GRAY+"Shift to buy 64 steak!", 0, 1, 0);
+                        }
                     }
                 }
                 if (sign.getLine(2).equals("Milk")) {
@@ -913,71 +890,100 @@ public class PlayerInteractListener implements Listener {
                     event.getPlayer().removePotionEffect(PotionEffectType.UNLUCK);
                 }
                 if (sign.getLine(1).equals("Get Gear")) {
-                    if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())) {
-                        Player g = event.getPlayer();
-                        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
-                        chestmeta.setColor(Color.RED);
-                        chestmeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangechest.setItemMeta(chestmeta);
+                    if(event.getAction().isRightClick() || event.getAction().isLeftClick()) {
+                        if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && PrisonGame.escaped.get(event.getPlayer())) {
+                            Player p = event.getPlayer();
+                            // Items:
+                            ItemStack crimHelmet = new ItemStack(Material.CHAINMAIL_HELMET);
+                            ItemStack crimChestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+                            ItemStack crimLeggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+                            ItemStack crimBoots = new ItemStack(Material.CHAINMAIL_BOOTS);
+                            // ItemMeta/LeatherChestpalteMeat
+                            ItemMeta crimHelmetMeta = crimHelmet.getItemMeta();
+                            LeatherArmorMeta crimChestplateMeta = (LeatherArmorMeta) crimChestplate.getItemMeta();
+                            ItemMeta crimLeggingsMeta = crimLeggings.getItemMeta();
+                            ItemMeta crimBootsMeta = crimBoots.getItemMeta();
+                            // Add ench
+                            crimHelmetMeta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+                            crimChestplateMeta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+                            crimChestplateMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, false);
+                            crimLeggingsMeta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+                            crimLeggingsMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1, false);
+                            crimBootsMeta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+                            // add misc
+                            crimChestplateMeta.setColor(Color.RED);
+                            String contr = "Armor " + ChatColor.RED + "[CONTRABAND]";
+                            crimChestplateMeta.setDisplayName(contr);
+                            crimLeggingsMeta.setDisplayName(contr);
+                            // Set ItemMeta
+                            crimHelmet.setItemMeta(crimHelmetMeta);
+                            crimChestplate.setItemMeta(crimChestplateMeta);
+                            crimLeggings.setItemMeta(crimLeggingsMeta);
+                            crimBoots.setItemMeta(crimBootsMeta);
+                            // Set Gear
+                            p.getInventory().setHelmet(crimHelmet);
+                            p.getInventory().setChestplate(crimChestplate);
+                            p.getInventory().setLeggings(crimLeggings);
+                            p.getInventory().setBoots(crimBoots);
+                            /*ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+                            orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                            LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+                            chestmeta.setColor(Color.RED);
+                            chestmeta.addEnchant(Enchantment.VANISHING_CURSE, 1, false);
+                            chestmeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
+                            orangechest.setItemMeta(chestmeta);
 
-                        ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
-                        orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangeleg.setItemMeta(orangelegItemMeta);
-
-
-                        g.getInventory().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
-                        g.getInventory().setBoots(new ItemStack(Material.CHAINMAIL_BOOTS));
-                        g.getInventory().setChestplate(orangechest);
-                        g.getInventory().setLeggings(orangeleg);
+                            ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+                            orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                            ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
+                            orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
+                            orangeleg.setItemMeta(orangelegItemMeta);*/
                     }
                     if (PrisonGame.roles.get(event.getPlayer()) == Role.PRISONER && !PrisonGame.escaped.get(event.getPlayer())) {
                         Player g = event.getPlayer();
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:escape");
                         g.playSound(g, Sound.ITEM_GOAT_HORN_SOUND_1, 1, 1);
                         PrisonGame.escaped.put(event.getPlayer(), true);
-                        Bukkit.broadcastMessage(ChatColor.RED + g.getName() + " escaped...");
+                        Keys.ESCAPE_COUNT.set(event.getPlayer(), Keys.ESCAPE_COUNT.get(event.getPlayer(), 0) + 1);
+                        Bukkit.broadcastMessage(ChatColor.RED + g.getName() + " escaped..."+ChatColor.GRAY+" ("+Keys.ESCAPE_COUNT.get(event.getPlayer(), 0)+")");
                         event.getPlayer().addPotionEffect(PotionEffectType.GLOWING.createEffect(999999999, 0));
 
-                        g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-                        g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
-                        g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
+                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.GRAY + g.getName());
 
 
-                        ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
-                        chestmeta.setColor(Color.RED);
-                        chestmeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangechest.setItemMeta(chestmeta);
+                            ItemStack orangechest = new ItemStack(Material.LEATHER_CHESTPLATE);
+                            orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                            LeatherArmorMeta chestmeta = (LeatherArmorMeta) orangechest.getItemMeta();
+                            chestmeta.setColor(Color.RED);
+                            chestmeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
+                            orangechest.setItemMeta(chestmeta);
 
-                        ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
-                        orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
-                        ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
-                        orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
-                        orangeleg.setItemMeta(orangelegItemMeta);
-
-
-                        g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override any current armor!");
-
-                        ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
-                        wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
-                        wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
-
-                        g.getInventory().addItem(wardenSword);
-
-                        g.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 4));
+                            ItemStack orangeleg = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+                            orangechest.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+                            ItemMeta orangelegItemMeta = orangeleg.getItemMeta();
+                            orangelegItemMeta.setDisplayName("Armor " + ChatColor.RED + "[CONTRABAND]");
+                            orangeleg.setItemMeta(orangelegItemMeta);
 
 
-                        if (PrisonGame.hardmode.get(g)) {
-                            g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Criminal " + PrisonGame.prisonnumber.get(g));
-                            g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY  + "Criminal " + PrisonGame.prisonnumber.get(g));
-                            g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + g.getName());
+                            g.sendMessage(ChatColor.LIGHT_PURPLE + "Reclick the sign to get armor; it will override ANY current armor!");
+
+                            ItemStack wardenSword = new ItemStack(Material.STONE_SWORD);
+                            wardenSword.addEnchantment(Enchantment.DAMAGE_ALL, 2);
+                            wardenSword.addEnchantment(Enchantment.DURABILITY, 1);
+
+                            g.getInventory().addItem(wardenSword);
+
+                            g.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE, 4));
+
+
+                            if (PrisonGame.hardmode.get(g)) {
+                                g.setCustomName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Criminal " + PrisonGame.prisonnumber.get(g));
+                                g.setDisplayName(ChatColor.GRAY + "[" + ChatColor.DARK_RED + "CRIMINAL" + ChatColor.GRAY + "] " + ChatColor.DARK_GRAY + "Criminal " + PrisonGame.prisonnumber.get(g));
+                                g.setPlayerListName(ChatColor.GRAY + "[" + ChatColor.RED + "HARD MODE" + ChatColor.DARK_GRAY + "] " + g.getName());
+                            }
                         }
-
                     }
                 }
             }
@@ -1062,6 +1068,10 @@ public class PlayerInteractListener implements Listener {
                 Door openable = (Door) state.getBlockData();
 
                 if (Bukkit.getWorld("world").getTime() > 15000 && Bukkit.getWorld("world").getTime() < 24000) {
+                    if(event.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
+                        event.setCancelled(false);
+                        return;
+                    }
                     if (event.getItem() != null) {
                         if (event.getItem().getItemMeta() != null) {
                             if (event.getItem().getItemMeta().getDisplayName().equals(ChatColor.BLUE + "Keycard " + ChatColor.RED + "[CONTRABAND]")) {
@@ -1176,7 +1186,7 @@ public class PlayerInteractListener implements Listener {
         if(IsEscaped)chance = crimchance;
         float comparison = rand.nextFloat() * 100;
         if(chance >= comparison){
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+p.getName()+" netherite_axe{Unbreakable:1,display:{Name:'[{\"text\":\"Brachydios\",\"bold\":true,\"color\":\"gold\"}]',Lore:['[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"(1 in 10,000)\",\"italic\":false}]']},Enchantments:[{id:vanishing_curse,lvl:1},{id:knockback,lvl:1},{id:sharpness,lvl:2}]} 1");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give "+p.getName()+" netherite_axe{Unbreakable:1,display:{Name:'[{\"text\":\"Branchy\",\"bold\":true,\"color\":\"gold\"}]',Lore:['[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"\",\"italic\":false}]','[{\"text\":\"(1 in 10,000)\",\"italic\":false}]']},Enchantments:[{id:vanishing_curse,lvl:1},{id:knockback,lvl:1},{id:sharpness,lvl:2}]} 1");
             Bukkit.broadcastMessage(ChatColor.GOLD+p.getName() + " got Branchy axe (RUN FOR YOUR LIFE)");
         }
     }

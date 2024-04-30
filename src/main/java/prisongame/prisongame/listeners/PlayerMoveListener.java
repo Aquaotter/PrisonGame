@@ -1,5 +1,6 @@
 package prisongame.prisongame.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +20,9 @@ public class PlayerMoveListener implements Listener {
                     event.getPlayer().addPotionEffect(PotionEffectType.SPEED.createEffect(event.getPlayer().getPotionEffect(PotionEffectType.SPEED).getDuration() + 20 * 25, 0));
                 } else {
                     event.getPlayer().addPotionEffect(PotionEffectType.SPEED.createEffect(20 * 30, 0));
+                }
+                if(event.getPlayer().getPotionEffect(PotionEffectType.SPEED).getDuration() >= 20 * 60 * 10){
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "advancement grant " + event.getPlayer().getName() + " only prison:marathon");
                 }
             }
         }

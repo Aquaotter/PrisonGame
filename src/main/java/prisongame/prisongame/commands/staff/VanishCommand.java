@@ -30,7 +30,6 @@ public class VanishCommand implements CommandExecutor {
                 loopedPlayer.showPlayer(PrisonGame.instance, player);
 
             sender.sendMessage(PrisonGame.mm.deserialize("<gray>You are revealed."));
-            Messages.INSTANCE.onJoin(player);
             return true;
         }
 
@@ -39,7 +38,6 @@ public class VanishCommand implements CommandExecutor {
             loopedPlayer.hidePlayer(PrisonGame.instance, player);
 
         sender.sendMessage(PrisonGame.mm.deserialize("<gray>You are hidden."));
-        Messages.INSTANCE.onLeave(player);
         return true;
     }
 }

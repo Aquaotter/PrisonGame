@@ -5,7 +5,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -183,6 +182,15 @@ public class InventoryClickListener implements Listener {
                             player.sendMessage("ok i changed that for u lol");
                             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         }
+                        player.closeInventory();
+                    }
+                    if (name.equals(ChatColor.GRAY + "no spy :(")) {
+                        event.setCancelled(true);
+                        Boolean allowSpy = Keys.NOSPY.get(player, 0)==1;
+                        if(allowSpy) {Keys.NOSPY.set(player, 0);}else{Keys.NOSPY.set(player, 1);}
+                        player.sendMessage("ok i changed that for u lol");
+                        player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                        player.closeInventory();
                     }
                     if (name.equals(ChatColor.BLUE + "old tab")) {
                         event.setCancelled(true);
@@ -195,6 +203,7 @@ public class InventoryClickListener implements Listener {
                             player.sendMessage("ok i changed that for u lol");
                             player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
                         }
+                        player.closeInventory();
                     }
 
                     if (name.equals(ChatColor.LIGHT_PURPLE + "-1 dollar")) {
@@ -205,6 +214,7 @@ public class InventoryClickListener implements Listener {
                         if(player.hasPotionEffect(PotionEffectType.DAMAGE_RESISTANCE)) return;
                         player.damage(999999);
                         Bukkit.broadcastMessage(player.getName() + " was robbed by bertrude (L)");
+                        player.closeInventory();
                     }
                     if (name.equals(ChatColor.LIGHT_PURPLE + "no warden spaces")) {
                         event.setCancelled(true);
@@ -227,6 +237,7 @@ public class InventoryClickListener implements Listener {
 
                         player.sendMessage("ok i changed that for u lol");
                         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                        player.closeInventory();
                     }
 
                     if (name.equals(ChatColor.DARK_PURPLE + "buy shulker box")) {
@@ -271,6 +282,7 @@ public class InventoryClickListener implements Listener {
 
                         player.sendMessage("you now have a shulker box");
                         player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 1, 1);
+                        player.closeInventory();
                     }
                 }
             }

@@ -44,6 +44,8 @@ public interface Keys {
     Key<Integer> PLUMBER_COUNT = new Key<>("PLUMBER_COUNT", new NamespacedKey(PrisonGame.instance, "plumbercount"), KeyTypes.INTEGER);
     Key<Integer> COOKEDFISH_COUNT = new Key<>("COOKEDFISH_COUNT", new NamespacedKey(PrisonGame.instance, "cookedfishcount"), KeyTypes.INTEGER);
     Key<Integer> DEVMODE = new Key<>("DEVMODE", new NamespacedKey(PrisonGame.instance, "devmode"), KeyTypes.INTEGER);
+    Key<Integer> ESCAPE_COUNT = new Key<>("ESCAPE_COUNT", new NamespacedKey(PrisonGame.instance, "escapecount"), KeyTypes.INTEGER);
+    Key<Integer> NOSPY = new Key<>("NOSPY", new NamespacedKey(PrisonGame.instance, "nospy"), KeyTypes.INTEGER);
     static @Nullable Key<?> valueOf(String name) {
         try {
             var field = Keys.class.getDeclaredField(name);

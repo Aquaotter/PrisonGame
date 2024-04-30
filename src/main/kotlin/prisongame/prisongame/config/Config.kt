@@ -64,6 +64,7 @@ data class Config(
         val guild: String,
         val chatChannel: String,
         val commandsChannel: String,
+        val punshmentChannel: String,
         val filterChannel: String,
         val linkedRole: String,
         val canSpeakRole: String
@@ -78,6 +79,7 @@ fun reloadConfig(): Config {
         mapping<Config.Discord>(
             "chat-channel" to "chatChannel",
             "commands-channel" to "commandsChannel",
+            "punshment-channel" to "punshmentChannel",
             "filter-channel" to "filterChannel",
             "linked-role" to "linkedRole",
             "can-speak-role" to "canSpeakRole"

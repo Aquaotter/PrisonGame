@@ -48,7 +48,7 @@ public class Solitary implements Feature {
                     Role role = PrisonGame.roles.get(player);
                     String acbar = "";
                     if (player.getDisplayName().contains("SOLITARY"))
-                        acbar = "||" + ChatColor.DARK_GRAY + " SOLITARY [ " + numberFormat.format(PrisonGame.solittime.get(player) / 20) + " seconds left. ]";
+                        acbar = " ||" + ChatColor.DARK_GRAY + " SOLITARY [ " + numberFormat.format(PrisonGame.solittime.get(player) / 20) + " seconds left. ]";
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(Keys.MONEY.get(player, 0.0)) + "$" + ChatColor.GRAY + acbar + ChatColor.GRAY + " || Current Warden: " + ChatColor.DARK_RED + PrisonGame.warden.getName()));
                 } else {
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN + numberFormat.format(Keys.MONEY.get(player, 0.0)) + "$" + ChatColor.GRAY + " || " + ChatColor.GRAY + "Current Warden: " + ChatColor.GREEN + "You! Use \"/warden help\"!"));

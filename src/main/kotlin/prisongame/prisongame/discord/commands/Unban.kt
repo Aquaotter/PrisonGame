@@ -9,9 +9,11 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import prisongame.prisongame.cbp.issueUnban
+import prisongame.prisongame.discord.listeners.Messages
 
 fun unban(event: SlashCommandInteractionEvent) {
     val playerName = event.getOption("player")!!.asString
+    val reason = event.getOption("reason")!!.asString
 
     if (!Bukkit.getPluginManager().isPluginEnabled("CustomBansPlus")) {
         event.reply("CustomBansPlus is disabled.")
@@ -24,5 +26,6 @@ fun unban(event: SlashCommandInteractionEvent) {
     val player = Bukkit.getOfflinePlayer(playerName)
 
     issueUnban(player)
-    event.hook.sendMessage("Unbanned **${player.name}**.").queue()
+    Messages.onUnpunishment(playerName, reason, "UNBAN", event.user.name)
+    event.hook.sendMessage("Unbanned **${player.name}** for **$reason**.").queue()
 }

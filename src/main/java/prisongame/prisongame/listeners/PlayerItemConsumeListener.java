@@ -14,7 +14,7 @@ public class PlayerItemConsumeListener implements Listener {
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         if (event.getPlayer().hasCooldown(event.getItem().getType()))
             event.setCancelled(true);
-        if (event.getPlayer().getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.RED_SAND)) {
+        if (event.getPlayer().getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.RED_SAND) && event.getPlayer().hasPotionEffect(PotionEffectType.JUMP)) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(ChatColor.RED+"Sorry, You can't eat during roll call!");
             return;

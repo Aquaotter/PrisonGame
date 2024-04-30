@@ -17,14 +17,13 @@ public class Barreled implements Feature {
 
     @Override
     public void execute() {
-        if (!PrisonGame.active.getName().equals("Barreled"))
+        if (!(PrisonGame.active.getName().equals("Barreled")))
             return;
-
         Schedule.bossBar.setTitle(Schedule.bossBar.getTitle() + ChatColor.GREEN + " Power: " + PrisonGame.BBpower);
 
-        if (Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"),-1023,-57,-994)).getType().equals(Material.AIR))
+        if (Bukkit.getWorld("world").getBlockAt(new Location(Bukkit.getWorld("world"), -1023, -57, -994)).getType().equals(Material.AIR))
             for (Player p : Bukkit.getOnlinePlayers())
-                if (PrisonGame.roles.get(p).equals(Role.PRISONER))
-                    p.addPotionEffect(PotionEffectType.SPEED.createEffect(20 * 5,0));
+                    if (PrisonGame.roles.get(p).equals(Role.PRISONER))
+                        p.addPotionEffect(PotionEffectType.SPEED.createEffect(20 * 5, 0));
     }
 }

@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import oshi.jna.platform.mac.SystemB;
 import prisongame.prisongame.MyListener;
 import prisongame.prisongame.PrisonGame;
 import prisongame.prisongame.lib.Role;
@@ -50,8 +51,10 @@ public class ForceCommand implements CommandExecutor {
             if (takeAction)
                 switch (role) {
                     case WARDEN -> {
-                        if (PrisonGame.warden != null)
+                        if (PrisonGame.warden != null) {
                             MyListener.playerJoin(PrisonGame.warden, false);
+                            PrisonGame.instance.giveWardenKit(player);
+                        }
 
                         player.performCommand("warden");
                     }
