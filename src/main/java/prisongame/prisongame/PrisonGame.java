@@ -34,7 +34,6 @@ import prisongame.prisongame.commands.economy.PayCommand;
 import prisongame.prisongame.commands.economy.staff.NerdCheatCommand;
 import prisongame.prisongame.commands.economy.staff.ResetMoneyCommand;
 import prisongame.prisongame.commands.economy.staff.SetMoneyCommand;
-import prisongame.prisongame.commands.misc.LeaderboardCommand;
 import prisongame.prisongame.commands.staff.*;
 import prisongame.prisongame.config.ConfigKt;
 import prisongame.prisongame.config.FallbackConfigKt;
